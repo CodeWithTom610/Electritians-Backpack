@@ -12,15 +12,15 @@ from    flask_bootstrap    import      Bootstrap5
 ###############################################################################################################
 
 #   Initialize Flask App        ###############################################################################
-app                             =       Flask(__name__)
+app                                             =       Flask(__name__)
 
 #   Initialize Bootstrap App    ###############################################################################
-bootstrap                       =       Bootstrap5(app)
+bootstrap                                       =       Bootstrap5(app)
 
 #   Configure Flask App         ##############################################################################
 
-app.config["SECRET_KEY"]        =       "7cd870fd19e3899b23e0eaafb97e094494b91d9957815a1"
-app.config["IMAGE_FOLDER"]      =       "./static/IMG/"
+app.config["SECRET_KEY"]                        =       "7cd870fd19e3899b23e0eaafb97e094494b91d9957815a1"
+app.config["IMAGE_FOLDER"]                      =       "./static/IMG/"
 
 
 ###############################################################################################################
@@ -28,8 +28,22 @@ app.config["IMAGE_FOLDER"]      =       "./static/IMG/"
 ###############################################################################################################
 
 @app.route('/')
-def index():
-    return render_template('index.html', title   =   "Home | EBT-Backpack")
+def             index():
+    return      render_template(
+                                                        'index.html',
+                title                          =        "Home | EBT-Backpack")
+
+@app.route('/tools-complete')
+def             tools_complete():
+    return      render_template(
+                                                        'alle_tools.html',
+                title                          =        "Alle Tools | EBT-Backpack")
+
+@app.route('/admin')
+def             admin_login():
+    return      render_template(
+                                                        'admin_login.html', 
+                title                          =        "Login | EBT-Backpack")
 
 
 ###############################################################################################################
