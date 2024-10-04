@@ -3,7 +3,9 @@
 ###############################################################################################################
 
 from    flask                                   import      *
-from    flask_wtf                               import      *
+from    flask_wtf                               import      FlaskForm
+from    wtforms                                 import      *
+from    wtforms.validators                      import      *
 from    flask_bootstrap                         import      Bootstrap5
 from    flask_sqlalchemy                        import      SQLAlchemy
 
@@ -26,6 +28,15 @@ app.config["SQLALCHEMY_DATABASE_URI"]           =           "sqlite:///database.
 #   Initialize Database         ##############################################################################
 db                                              =           SQLAlchemy()
 db.                                             init_app    (app)
+
+###############################################################################################################
+############################                Routes                #############################################
+###############################################################################################################
+
+class ResistorForm(FlaskForm):
+    Voltage = IntegerField("Trage hier die Spannung [U] in Volt (V) ein.", validators=[DataRequired("Bitte gebe die Spannung ein!")])
+    Current = IntegerField("Trage hier noch die Stromstärke [I] in Ampére (A) ein.")
+    
 
 ###############################################################################################################
 ############################                Routes                #############################################
@@ -55,6 +66,7 @@ def             admin_login():
 ###############################################################################################################
 ############################           Database Models         ################################################
 ###############################################################################################################
+
 class New_Card                                              (db.Model):
     __tablename__                               =           "NewsCards"
     id                                          =            db.Column(

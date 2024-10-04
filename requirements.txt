@@ -3,3 +3,4 @@ bootstrap_flask
 flask_wtf
 Gunicorn
 Flask-SQLAlchemy
+flask-login
