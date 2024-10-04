@@ -13,7 +13,7 @@ from    flask_sqlalchemy                        import      SQLAlchemy
 ###############################################################################################################
 
 #   Initialize Flask App        ###############################################################################
-app                                             =           Flask(__name__)
+app                                             =           Flask(__name__, static_url_path='/static')
 
 #   Initialize Bootstrap App    ###############################################################################
 bootstrap                                       =           Bootstrap5(app)
@@ -21,7 +21,6 @@ bootstrap                                       =           Bootstrap5(app)
 #   Configure Flask App         ##############################################################################
 
 app.config["SECRET_KEY"]                        =           "7cd870fd19e3899b23e0eaafb97e094494b91d9957815a1"
-app.config["IMAGE_FOLDER"]                      =           "./static/IMG/"
 app.config["SQLALCHEMY_DATABASE_URI"]           =           "sqlite:///database.db"
 
 #   Initialize Database         ##############################################################################
@@ -34,9 +33,11 @@ db.                                             init_app    (app)
 
 @app.route('/')
 def             news():
+    news                                        =           New_Card.query.all()
     return      render_template(
                                                             'index.html',
-                title                           =           "Home | EBT-Backpack")
+                title                           =           "Home | EBT-Backpack",
+                news                            =           news)
 
 @app.route('/tools-complete')
 def             tools_complete():

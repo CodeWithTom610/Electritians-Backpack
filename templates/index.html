@@ -1,1 +1,17 @@
 {% extends 'base.html' %}
+
+{% block content %}
+    
+    {% for new in news %}
+    <div class="grid text-center" style="--bs-gap: 1,5rem; padding-top: 5px; padding-left: 5px;">
+            <div class="card" style="width: 18rem;">
+                <img src="/static/IMG/{{new.imagepath}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">{{new.header}}</h5>
+                <p class="card-text">{{new.content}}</p>
+                <a href="mailto:tom.walla@bmw.de?subject=Fehlermeldung | EBT-Backpack" class="btn btn-primary">Hier einfach Fehler melden</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}
