@@ -37,7 +37,7 @@ login_manager.init_app(app)
 login_manager.login_view = "admin_login"
 @login_manager.user_loader
 def load_user(user_id):
-    return Admin_User.get(user_id)
+    return Admin_User.query.filter_by(id=user_id).first()
 
 ###############################################################################################################
 ############################                Routes                #############################################
@@ -52,6 +52,12 @@ class LoginForm(FlaskForm, UserMixin):
     username = StringField("Bitte Benutzernamen eingeben:", validators=[DataRequired()])
     password = PasswordField("Bitte Passwort eingeben:", validators=[DataRequired()])
     loginbutton = SubmitField("Login")
+
+    def is_active(self):
+       return True
+
+class LogoutForm(FlaskForm, UserMixin):
+    logoutbutton = SubmitField("Logout")
 
     
 
@@ -76,15 +82,21 @@ def             tools_complete():
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
-    return render_template('admin-dashboard.html')
+    logout_form = LogoutForm()
+    if logout_form.validate_on_submit():
+        logout_user()
+
+    return render_template('admin-dashboard.html', form = logout_form)
 
 @app.route('/admin', methods=["GET", "POST"])
 def             admin_login():
     form                                        =           LoginForm()
     if form.validate_on_submit():
-        user = Admin_User.query.all()
-        for username in user:   
-            print(username)
+        user = Admin_User.query.filter_by(username=form.username.data).first()
+        if user and user.password == form.password.data:
+            
+            login_user(user, remember=False)
+            return redirect(url_for(admin_dashboard)) 
     return      render_template(
                                                             'admin_login.html', 
                 title                           =           "Login | EBT-Backpack",
