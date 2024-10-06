@@ -9,6 +9,7 @@ from    wtforms.validators                      import      DataRequired
 from    flask_bootstrap                         import      Bootstrap5
 from    flask_sqlalchemy                        import      SQLAlchemy
 from    flask_login                             import      *
+from    bcrypt                                  import      hashpw, checkpw, gensalt
 
 
 ###############################################################################################################
@@ -79,14 +80,15 @@ def             tools_complete():
                                                             'alle_tools.html',
                 title                           =           "Alle Tools | EBT-Backpack")
 
-@app.route('/admin/dashboard')
+@app.route('/admin/dashboard', methods=["GET", "POST"])
 @login_required
 def admin_dashboard():
-    logout_form = LogoutForm()
-    if logout_form.validate_on_submit():
+    form = LogoutForm()
+    if form.validate_on_submit():
+        flash("Logged out successfully!", "message")
         logout_user()
 
-    return render_template('admin-dashboard.html', form = logout_form)
+    return render_template('admin-dashboard.html', form = form)
 
 @app.route('/admin', methods=["GET", "POST"])
 def             admin_login():
@@ -96,7 +98,7 @@ def             admin_login():
         if user and user.password == form.password.data:
             
             login_user(user, remember=False)
-            return redirect(url_for(admin_dashboard)) 
+            return redirect(url_for("admin_dashboard")) 
     return      render_template(
                                                             'admin_login.html', 
                 title                           =           "Login | EBT-Backpack",
@@ -123,7 +125,7 @@ class New_Card                                              (db.Model):
     imagepath                                   =            db.Column(
                                                              db.String)
     
-class Admin_User                                           (db.Model):
+class Admin_User                                           (db.Model, UserMixin):
     __tablename__                               =           "Admin_Users"
     id                                          =            db.Column(
                                                              db.Integer,
