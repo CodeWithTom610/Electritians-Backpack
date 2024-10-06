@@ -4,3 +4,4 @@ flask_wtf
 Gunicorn
 Flask-SQLAlchemy
 flask-login
+bcrypt

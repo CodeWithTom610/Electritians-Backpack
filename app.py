@@ -4,12 +4,12 @@
 
 from    flask                                   import      *
 from    flask_wtf                               import      FlaskForm
-from    wtforms                                 import      StringField,PasswordField,IntegerField, SubmitField
+from    wtforms                                 import      StringField,PasswordField,IntegerField, BooleanField, SubmitField
 from    wtforms.validators                      import      DataRequired
 from    flask_bootstrap                         import      Bootstrap5
 from    flask_sqlalchemy                        import      SQLAlchemy
 from    flask_login                             import      *
-from    bcrypt                                  import      hashpw, checkpw, gensalt
+from    flask_bcrypt                            import      *
 
 
 ###############################################################################################################
@@ -40,6 +40,16 @@ login_manager.login_view = "admin_login"
 def load_user(user_id):
     return Admin_User.query.filter_by(id=user_id).first()
 
+#   Initialize Bcrypt           #############################################################################
+bcrypt = Bcrypt(app)
+def hash_password(plain_password: str):
+    pw_hash = bcrypt.generate_password_hash(plain_password).decode('utf-8')
+    return pw_hash
+
+def check_password(plain_password:str, password_hash:any):
+    checked_pw = bcrypt.check_password_hash(password_hash, plain_password) # returns True
+    return checked_pw
+
 ###############################################################################################################
 ############################                Routes                #############################################
 ###############################################################################################################
@@ -52,6 +62,7 @@ class ResistorForm(FlaskForm):
 class LoginForm(FlaskForm, UserMixin):
     username = StringField("Bitte Benutzernamen eingeben:", validators=[DataRequired()])
     password = PasswordField("Bitte Passwort eingeben:", validators=[DataRequired()])
+    remember = BooleanField("Eingeloggt bleiben?")
     loginbutton = SubmitField("Login")
 
     def is_active(self):
@@ -85,7 +96,6 @@ def             tools_complete():
 def admin_dashboard():
     form = LogoutForm()
     if form.validate_on_submit():
-        flash("Logged out successfully!", "message")
         logout_user()
 
     return render_template('admin-dashboard.html', form = form)
@@ -93,11 +103,13 @@ def admin_dashboard():
 @app.route('/admin', methods=["GET", "POST"])
 def             admin_login():
     form                                        =           LoginForm()
-    if form.validate_on_submit():
-        user = Admin_User.query.filter_by(username=form.username.data).first()
-        if user and user.password == form.password.data:
+    if                                          form.       validate_on_submit():
+        user                                    =           Admin_User.query.filter_by(username=form.username.data).first()
+        user_password = user.password
+        checked_pw = check_password(form.password.data, user_password)
+        if  user          and     checked_pw:
             
-            login_user(user, remember=False)
+            login_user(user, remember=form.remember.data)
             return redirect(url_for("admin_dashboard")) 
     return      render_template(
                                                             'admin_login.html', 
