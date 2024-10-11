@@ -101,14 +101,12 @@ def tools_complete():
 @app.route('/admin/dashboard', methods=["GET", "POST"])
 @login_required
 def admin_dashboard():
-    form = LogoutForm()
-    if form.validate_on_submit():
-        logout_user()
-        return redirect(url_for('admin_login'))
-
-    # Fetch existing news cards
+    username = current_user.username
     news_cards = New_Card.query.all()
-    return render_template('admin-dashboard.html', form=form, news_cards=news_cards)
+    return render_template('admin-dashboard.html', news_cards=news_cards, username=username)
+
+def logout():
+    logout_user()
 
 # Admin Login
 @app.route('/admin', methods=["GET", "POST"])
@@ -142,7 +140,7 @@ def manage_news():
     return render_template('news_management.html', form=form)
 
 # Admin Logout
-@app.route('/admin/logout', methods=["POST"])
+@app.route('/admin/logout', methods=["GET", "POST"])
 @login_required
 def admin_logout():
     logout_user()
@@ -184,6 +182,13 @@ class Admin_User(db.Model, UserMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
 
+class Tool_Card(db.Model):
+    __tablename__ = "Tool_Cards"
+    id = db.Column(db.Integer, primary_key=True)
+    tool_name = db.Column(db.String, unique=True, nullable=False)
+    tool_description = db.Column(db.String, unique=True, nullable = False)
+    endpoint = db.Column(db.String, unique=True, nullable = False)
+
 ###############################################################################################################
 ############################              Run Dialog              #############################################
 ###############################################################################################################
@@ -192,4 +197,6 @@ with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
+    #hashed_pw = hash_password("Tom@2906")
+    #print(hashed_pw)
     app.run(host='127.0.0.1', port=8000, debug=True)
