@@ -72,11 +72,21 @@ class LogoutForm(FlaskForm, UserMixin):
     logoutbutton = SubmitField("Logout")
 
 class NewsForm(FlaskForm):
-    header = StringField("News Header", validators=[DataRequired()])
-    content = StringField("News Content", validators=[DataRequired()])
-    author = StringField("Author")
-    imagepath = StringField("Image Path")
-    submit = SubmitField("Save News")
+    header = StringField("Titel", validators=[DataRequired()])
+    content = StringField("Text/Inhalt", validators=[DataRequired()])
+    author = StringField("Autor")
+    imagepath = StringField("Bildname")
+    submit = SubmitField("Speichern")
+
+class UserForm(FlaskForm):
+    username = StringField("Benutzername", validators=[DataRequired()])
+    password = PasswordField("Passwort", validators=[DataRequired()])
+    submit = SubmitField("Speichern")
+
+class ResetForm(FlaskForm):
+    password = PasswordField("Neues Passwort", validators=[DataRequired()])
+    password_repeat = PasswordField("Wiederhole neues Passwort", validators=[DataRequired()])
+    submit = SubmitField("Speichern")
 
 ###############################################################################################################
 ############################                Routes                #############################################
@@ -103,10 +113,18 @@ def tools_complete():
 def admin_dashboard():
     username = current_user.username
     news_cards = New_Card.query.all()
-    return render_template('admin-dashboard.html', news_cards=news_cards, username=username)
+    count_user = count_entries()
+    count_news = New_Card.query.count()
+    count_tools = Tool_Cards.query.count()
+    return render_template('admin-dashboard.html', news_cards=news_cards, username=username, title="Dashboard | EBT-Backpack", count_user = count_user, count_news=count_news, count_tools=count_tools)
 
 def logout():
     logout_user()
+
+def count_entries():
+    count = Admin_User.query.count()
+    countint = int(count)
+    return countint
 
 # Admin Login
 @app.route('/admin', methods=["GET", "POST"])
@@ -121,23 +139,16 @@ def admin_login():
             return redirect(url_for("admin_dashboard"))
     return render_template('admin_login.html', title="Login | EBT-Backpack", form=form)
 
+
+
 # Manage News (Add/Edit News)
 @app.route('/admin/news', methods=["GET", "POST"])
 @login_required
 def manage_news():
-    form = NewsForm()
-    if form.validate_on_submit():
-        new_card = New_Card(
-            header=form.header.data,
-            content=form.content.data,
-            author=form.author.data,
-            imagepath=form.imagepath.data
-        )
-        db.session.add(new_card)
-        db.session.commit()
-        return redirect(url_for('admin_dashboard'))
+   
+    news = New_Card.query.all()
 
-    return render_template('news_management.html', form=form)
+    return render_template('edit_news.html', title="Neuigkeiten Bearbeiten | EBT-Backpack", username=current_user.username, news=news)
 
 # Admin Logout
 @app.route('/admin/logout', methods=["GET", "POST"])
@@ -146,13 +157,12 @@ def admin_logout():
     logout_user()
     return redirect(url_for('news'))
 
-# Edit an existing news card
-@app.route('/admin/edit_news/<int:news_id>', methods=["GET", "POST"])
+@app.route('/admin/edit-news/<int:news_id>', methods=["GET", "POST"])
 @login_required
 def edit_news(news_id):
+    username = current_user.username
     news_card = New_Card.query.get_or_404(news_id)
-    form = NewsForm(obj=news_card)  # Form mit den existierenden Daten der News-Karte vorfüllen
-
+    form = NewsForm(obj=news_card)
     if form.validate_on_submit():
         news_card.header = form.header.data
         news_card.content = form.content.data
@@ -160,8 +170,72 @@ def edit_news(news_id):
         news_card.imagepath = form.imagepath.data
         db.session.commit()  # Änderungen speichern
         return redirect(url_for('admin_dashboard'))
+    
+    return render_template('news-management.html', news_card=news_card, form=form, username=username, title=f"Bearbeite Karte id: {news_id} | EBT-Backpack")
 
-    return render_template('edit_news.html', form=form, news_card=news_card)
+@app.route('/admin/edit-news/new-entry', methods=["GET", "POST"])
+@login_required
+def new_entry():
+    username = current_user.username
+    form = NewsForm()
+    if form.validate_on_submit():
+        new_card = New_Card(header=form.header.data, content=form.content.data, author=form.author.data, imagepath=form.imagepath.data)
+        db.session.add(new_card)
+        db.session.commit()  # Änderungen speichern
+        return redirect(url_for("manage_news"))
+    return render_template('new-entry-news.html', username=username, form=form, title="Neuer Eintrag | EBT-Backpack")
+
+@app.route('/admin/delete-news/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_card(id):
+    news_card = New_Card.query.get_or_404(id)  # Abrufen der Karte, die gelöscht werden soll
+    db.session.delete(news_card)  # Karte löschen
+    db.session.commit()  # Änderungen speichern
+    return redirect(url_for('manage_news'))  # Zurück zur Manage-Seite
+
+@app.route('/admin/users')
+@login_required
+def users():
+    username = current_user.username
+    users = Admin_User.query.all()
+    return render_template("manage-users.html", title="Benutzer | EBT-Backpack", users = users, username = username)
+
+@app.route('/admin/users/delete_user/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def delete_user(user_id):
+    user = Admin_User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('users'))
+
+@app.route('/admin/users/new_user', methods=['GET', 'POST'])
+@login_required
+def new_user():
+    form = UserForm()
+    username = current_user.username
+    if form.validate_on_submit():
+        hashed_pw = hash_password(form.password.data)
+        new_user = Admin_User(username=form.username.data, password=hashed_pw)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('users'))
+
+    return render_template("new-user.html", title="Neuer Benutzer | EBT-Backpack", form=form, username=username)
+
+@app.route('/admin/users/reset/password/<int:user_id>', methods=['GET', 'POST'])
+def reset_password(user_id):
+    form = ResetForm()
+    username = current_user.username
+    title=f"Passwort Reset für Benutzer: {user_id}"
+    if form.validate_on_submit():
+        if form.password.data == form.password_repeat.data:
+            user = Admin_User.query.get_or_404(user_id)
+            hashed_pw = hash_password(form.password.data)
+            user.password = hashed_pw
+            db.session.commit()
+        else:
+            title="Passwörter müssen übereinstimmen!"
+    return render_template("reset-password.html", title=title, username = username, form=form)
 
 
 ###############################################################################################################
@@ -182,12 +256,12 @@ class Admin_User(db.Model, UserMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
 
-class Tool_Card(db.Model):
+class Tool_Cards(db.Model):
     __tablename__ = "Tool_Cards"
     id = db.Column(db.Integer, primary_key=True)
-    tool_name = db.Column(db.String, unique=True, nullable=False)
-    tool_description = db.Column(db.String, unique=True, nullable = False)
-    endpoint = db.Column(db.String, unique=True, nullable = False)
+    tool_name = db.Column(db.String, unique=True)
+    tool_description = db.Column(db.String, unique=True)
+    endpoint = db.Column(db.String, unique=True)
 
 ###############################################################################################################
 ############################              Run Dialog              #############################################
@@ -197,6 +271,4 @@ with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
-    #hashed_pw = hash_password("Tom@2906")
-    #print(hashed_pw)
     app.run(host='127.0.0.1', port=8000, debug=True)

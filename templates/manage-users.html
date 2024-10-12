@@ -6,7 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
   {{ bootstrap.load_css() }}
   <title>{{title}}</title>
-</head>    
+</head>
 
 <body class="bg-light">
 
@@ -14,23 +14,23 @@
         <!-- Sidebar -->
         <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">Hello, {{username}}</span>
+                <span class="fs-4">Moin, {{username}}</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="{{url_for('admin_dashboard')}}" class="nav-link active" aria-current="page">
+                    <a href="{{url_for('admin_dashboard')}}" class="nav-link text-white" aria-current="page">
                         <i class="bi bi-house-door-fill me-2"></i> Dashboard
                     </a>
                 </li>
                 <li>
-                    <a href="{{url_for('users')}}" class="nav-link text-white">
+                    <a href="{{url_for('users')}}" class="nav-link active">
                         <i class="bi bi-people-fill me-2"></i> Benutzer
                     </a>
                 </li>
                 <li>
                     <a href="{{url_for('manage_news')}}" class="nav-link text-white">
-                        <i class="bi bi-pencil-fill me-2"></i> Neuigkeiten Bearbeiten
+                        <i class="bi bi-pencil-fill me-2"></i> Neuigkeiten bearbeiten
                     </a>
                 </li>
             </ul>
@@ -50,36 +50,32 @@
             <!-- Top Navigation or Breadcrumb -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>{{title}}</h2>
+                <a class="btn btn-primary" href="{{url_for('new_user')}}" role="button">Neuer Benutzer</a>
             </div>
 
-            <!-- Statistics Cards -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card text-bg-primary mb-3">
-                        <div class="card-header">Users</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{count_user}} Benutzer in der Datenbank</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-bg-success mb-3">
-                        <div class="card-header">Neuigkeiten</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{count_news}} Insgesammt hochgeladene Artikel</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-bg-secondary mb-3">
-                        <div class="card-header">Tools</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{count_tools}} Erstellte Tools</h5>
-                        </div>
-                    </div>
-                </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Benutzername</th>
+                            <th scope="col">Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>
+                                <a class="btn btn-danger" href="{{url_for('delete_user', user_id = user.id)}}" role="button">Benutzer Löschen</a>
+                                <a class="btn btn-warning" href="{{url_for('reset_password', user_id = user.id)}}" role="button">Passwort Zurücksetzen</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            
         </div>
     </main>
 </body>

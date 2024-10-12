@@ -1,3 +1,4 @@
+{% from 'bootstrap5/form.html' import render_form %}
 {% block content %}
 <head>
   <meta charset="UTF-8">
@@ -14,7 +15,7 @@
         <!-- Sidebar -->
         <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">Hello, {{username}}</span>
+                <span class="fs-4">Moin, {{username}}</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
@@ -25,7 +26,7 @@
                 </li>
                 <li>
                     <a href="{{url_for('users')}}" class="nav-link text-white">
-                        <i class="bi bi-people-fill me-2"></i> Benutzer
+                        <i class="bi bi-people-fill me-2"></i> Bneutzer
                     </a>
                 </li>
                 <li>
@@ -52,32 +53,9 @@
                 <h2>{{title}}</h2>
             </div>
 
-            <!-- Statistics Cards -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card text-bg-primary mb-3">
-                        <div class="card-header">Users</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{count_user}} Benutzer in der Datenbank</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-bg-success mb-3">
-                        <div class="card-header">Neuigkeiten</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{count_news}} Insgesammt hochgeladene Artikel</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card text-bg-secondary mb-3">
-                        <div class="card-header">Tools</div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{count_tools}} Erstellte Tools</h5>
-                        </div>
-                    </div>
-                </div>
+            <div class="container-sm", style="align-items: center; padding: 60px; background-color: rgb(191, 191, 191); margin-top: 60px; border-radius: 30px;">
+                {{render_form(form)}}
+                <a class="btn btn-danger" href="{{url_for('manage_news')}}" role="button">Abbrechen</a>
             </div>
             
         </div>
