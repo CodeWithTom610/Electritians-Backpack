@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from . import db  # db wird jetzt importiert, nachdem es in __init__.py initialisiert wurde
+from . import db
 
 class New_Card(db.Model):
     __tablename__ = "NewsCards"
