@@ -6,7 +6,9 @@
         {% for new in news %}
         <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamische Spalten -->
             <div class="card shadow-sm" style="width: 100%;">
-                <img src="{{new.imagepath}}" class="card-img-top" alt="{{new.imagepath}}" style="height: 233px; width: 414px; ">
+                <div style="height: 233px; overflow: hidden;"> <!-- Bildcontainer mit fester Höhe und Overflow-Eigenschaft -->
+                    <img src="{{new.imagepath}}" class="card-img-top" alt="{{new.imagepath}}" style="width: 100%; height: auto;"> <!-- Bild wird auf Breite skaliert -->
+                </div>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{new.header}}</h5>
                     <p class="card-text">{{new.content}}</p>

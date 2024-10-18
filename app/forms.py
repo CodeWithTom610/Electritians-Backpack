@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, IntegerField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, IntegerField, BooleanField, SubmitField, EmailField
+from wtforms.validators import DataRequired, length
 
 class ResistorForm(FlaskForm):
     Voltage = IntegerField("Spannung [V]", validators=[DataRequired()])
@@ -20,11 +20,13 @@ class NewsForm(FlaskForm):
     submit = SubmitField("Speichern")
 
 class UserForm(FlaskForm):
+    name = StringField("Vollständiger Name", validators=[DataRequired()])
     username = StringField("Benutzername", validators=[DataRequired()])
-    password = PasswordField("Passwort", validators=[DataRequired()])
+    e_mail = EmailField("E-Mail Adresse", validators=[DataRequired()])
+    password = PasswordField("Passwort", validators=[DataRequired(length(3, 128))])
     submit = SubmitField("Speichern")
 
 class ResetForm(FlaskForm):
-    password = PasswordField("Neues Passwort", validators=[DataRequired()])
-    password_repeat = PasswordField("Wiederhole neues Passwort", validators=[DataRequired()])
+    password = PasswordField("Neues Passwort", validators=[DataRequired(), length(3, 128)])
+    password_repeat = PasswordField("Wiederhole neues Passwort", validators=[DataRequired(), length(3, 128)])
     submit = SubmitField("Speichern")

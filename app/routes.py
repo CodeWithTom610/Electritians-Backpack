@@ -34,6 +34,7 @@ def tools_complete():
 def manage_news():
    
     news = New_Card.query.all()
+    print(news)
 
     return render_template('edit_news.html', title="Neuigkeiten Bearbeiten | EBT-Backpack", username=current_user.username, news=news)
 
@@ -113,7 +114,7 @@ def new_user():
     username = current_user.username
     if form.validate_on_submit():
         hashed_pw = hash_password(form.password.data)
-        new_user = Admin_User(username=form.username.data, password=hashed_pw)
+        new_user = Admin_User(username=form.username.data, password=hashed_pw, e_mail=form.e_mail.data, name=form.name.data)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('main.users'))

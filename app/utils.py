@@ -11,3 +11,4 @@ def count_entries():
     count = Admin_User.query.count()
     countint = int(count)
     return countint
+

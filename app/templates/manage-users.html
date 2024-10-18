@@ -67,7 +67,9 @@
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">ID</th>
+                            <th scope="col">Vollständiger Name</th>
                             <th scope="col">Benutzername</th>
+                            <th scope="col">E-Mail Adresse</th>
                             <th scope="col">Aktionen</th>
                         </tr>
                     </thead>
@@ -75,7 +77,10 @@
                         {% for user in users %}
                         <tr>
                             <td>{{ user.id }}</td>
+                            <td>{{ user.name }}</td>
                             <td>{{ user.username }}</td>
+                            <td>{{ user.e_mail }}</td>
+
                             <td>
                                     <a class="btn btn-danger" href="{{url_for('main.check_user', user_id = user.id)}}" role="button">Benutzer Löschen</a>
                                     <a class="btn btn-warning" href="{{url_for('main.reset_password', user_id = user.id)}}" role="button">Passwort Zurücksetzen</a>

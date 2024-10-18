@@ -5,15 +5,97 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  
+  <style>
+    body {
+      background: #f5f7fa;
+      height: 100vh;
+      display: flex;
+      margin: 0;
+      overflow: hidden; /* Verhindert Scroll-Probleme */
+    }
+
+    /* Sidebar styling */
+    .sidebar {
+      background-color: #343a40;
+      color: white;
+      width: 280px;
+      height: 100vh;
+      flex-shrink: 0;
+      padding: 20px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .sidebar .nav-link.active {
+      background-color: #007bff;
+    }
+
+    .sidebar hr {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Main content area */
+    .main-content {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto; /* Falls der Inhalt größer wird */
+      background-color: #f8f9fa;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      margin: auto;
+      padding-top: auto;
+    }
+
+    .form-control {
+      border-radius: 50px;
+      padding-left: 2.5rem;
+    }
+
+    .form-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: #6c757d;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-radius: 50px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+  </style>
   {{ bootstrap.load_css() }}
   <title>{{title}}</title>
 </head>    
 
-<body class="bg-light">
+<body>
 
-    <main class="d-flex">
+    <main class="d-flex w-100">
         <!-- Sidebar -->
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
+        <div class="sidebar">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <span class="fs-4">Moin, {{username}}</span>
             </a>
@@ -37,7 +119,7 @@
             </ul>
             <hr>
             <div class="dropdown">
-                <a href="{{url_for('main.admin_dashboard')}}" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <strong>{{username}}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -47,19 +129,57 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="flex-grow-1 p-4">
+        <div class="main-content">
             <!-- Top Navigation or Breadcrumb -->
-            <div class="d-flex" style="width: auto;">
-                <h2 style="align-self: center;">{{title}}</h2>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>{{title}}</h2>
             </div>
 
-            <div class="container-sm", style="align-items: center; padding: 60px; background-color: rgb(191, 191, 191); margin-top: 60px; border-radius: 30px;">
-                {{render_form(form)}}
-                <a class="btn btn-danger" href="{{url_for('main.users')}}" role="button">Abbrechen</a>
-            </div>
+            <!-- Form Card -->
+            <div class="form-card">
+                <h2>Benutzerkonto erstellen</h2>
             
+                <form method="POST">
+                  {{ form.hidden_tag() }}
+            
+                  <!-- Name -->
+                  <div class="mb-3 position-relative">
+                    <span class="form-icon"><i class="bi bi-person-fill"></i></span>
+                    {{ form.name.label(class="form-label visually-hidden") }}
+                    {{ form.name(class="form-control", placeholder="Vollständiger Name") }}
+                  </div>
+            
+                  <!-- Benutzername -->
+                  <div class="mb-3 position-relative">
+                    <span class="form-icon"><i class="bi bi-at"></i></span>
+                    {{ form.username.label(class="form-label visually-hidden") }}
+                    {{ form.username(class="form-control", placeholder="Benutzername") }}
+                  </div>
+            
+                  <!-- E-Mail -->
+                  <div class="mb-3 position-relative">
+                    <span class="form-icon"><i class="bi bi-envelope-fill"></i></span>
+                    {{ form.e_mail.label(class="form-label visually-hidden") }}
+                    {{ form.e_mail(class="form-control", placeholder="E-Mail Adresse") }}
+                  </div>
+            
+                  <!-- Passwort -->
+                  <div class="mb-3 position-relative">
+                    <span class="form-icon"><i class="bi bi-lock-fill"></i></span>
+                    {{ form.password.label(class="form-label visually-hidden") }}
+                    {{ form.password(class="form-control", placeholder="Passwort") }}
+                  </div>
+            
+                  <!-- Submit -->
+                  <div class="d-grid gap-2">
+                    {{ form.submit(class="btn btn-primary btn-block") }}
+                  </div>
+                </form>
+            </div>
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"></script>
 </body>
 {% endblock content %}
-
