@@ -6,3 +6,4 @@ Flask-SQLAlchemy
 flask-login
 flask_bcrypt
 flask_migrate
+sendgrid

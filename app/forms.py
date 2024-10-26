@@ -29,4 +29,5 @@ class UserForm(FlaskForm):
 class ResetForm(FlaskForm):
     password = PasswordField("Neues Passwort", validators=[DataRequired(), length(3, 128)])
     password_repeat = PasswordField("Wiederhole neues Passwort", validators=[DataRequired(), length(3, 128)])
+    reset_token = StringField("Trage hier deinen Reset Token ein.", validators=[DataRequired()])
     submit = SubmitField("Speichern")

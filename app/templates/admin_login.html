@@ -3,7 +3,32 @@
 
 {% block content %}
 <div class="container-sm", style="align-items: center; padding: 60px; background-color: rgb(191, 191, 191); margin-top: 60px; border-radius: 30px;">
-    <h1>Admin-Login</h1>
-    {{render_form(form)}}
+    <div class="form-card">
+        <h2 style="align-self: center;">Login</h2>
+    
+        <form method="POST">
+          {{ form.hidden_tag() }}
+
+    
+          <!-- Benutzername -->
+          <div class="mb-3 position-relative">
+            <span class="form-icon"><i class="bi bi-at"></i></span>
+            {{ form.username.label(class="form-label visually-hidden") }}
+            {{ form.username(class="form-control", placeholder="Benutzername") }}
+          </div>
+    
+          <!-- Passwort -->
+          <div class="mb-3 position-relative">
+            <span class="form-icon"><i class="bi bi-lock-fill"></i></span>
+            {{ form.password.label(class="form-label visually-hidden") }}
+            {{ form.password(class="form-control", placeholder="Passwort") }}
+          </div>
+    
+          <!-- Submit -->
+          <div class="d-grid gap-2">
+            {{ form.loginbutton(class="btn btn-primary btn-block") }}
+          </div>
+        </form>
+    </div>
 </div>    
 {% endblock content %}

@@ -16,6 +16,7 @@ class Admin_User(db.Model, UserMixin):
     username = db.Column(db.String, nullable=False)
     e_mail = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
+    token = db.Column(db.String, nullable = True)
 
 class Tool_Cards(db.Model):
     __tablename__ = "Tool_Cards"
