@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField, BooleanField, SubmitField, EmailField
-from wtforms.validators import DataRequired, length
+from wtforms.validators import DataRequired, length, NumberRange
 
 class ResistorForm(FlaskForm):
-    Voltage = IntegerField("Spannung [V]", validators=[DataRequired()])
+    Voltage = StringField("Spannung [V]", validators=[DataRequired()])
     Current = IntegerField("Stromstärke [A]", validators=[DataRequired()])
+    submit = SubmitField("Berechnen")
 
 class LoginForm(FlaskForm):
     username = StringField("Benutzername", validators=[DataRequired()])

@@ -1,12 +1,13 @@
-from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash
+from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session
 from flask_login import login_required, login_user, logout_user, current_user
-from .forms import LoginForm, NewsForm, UserForm, ResetForm
+from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm
 from .models import New_Card, Admin_User, Tool_Cards
 from .utils import check_password, hash_password, count_entries, send_token
 from . import db
 import os
 import string
 import random
+from.tools import ResistanceCalculating
 
 main = Blueprint('main', __name__)
 
@@ -24,11 +25,16 @@ def admin_login():
         if user and check_password(form.password.data, user.password):
             login_user(user, remember=form.remember.data)
             return redirect(url_for("main.admin_dashboard"))
+        else:
+            flash("Wrong username or password", 'warning')
     return render_template('admin_login.html', title="Login | EBT-Backpack", form=form)
 
 @main.route('/tools-complete')
 def tools_complete():
-    return render_template('alle_tools.html')
+    tools = Tool_Cards.query.all()
+    for tool in tools:
+        print(tool.tool_name)
+    return render_template('alle_tools.html', tools=tools)
 
 # Manage News (Add/Edit News)
 @main.route('/admin/news', methods=["GET", "POST"])
@@ -157,3 +163,13 @@ def admin_dashboard():
 def favicon():
     return send_from_directory(os.path.join(main.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+@main.route("/tools/resistance-calculator", methods=["GET", "POST"])
+def resistance_calculator():
+    form = ResistorForm()
+    if form.validate_on_submit():
+        resistance = ResistanceCalculating.ResistanceCalculatorSingle(form.Voltage.data, form.Current.data)
+        return render_template('widerstandsrechner.html', form = form, result = resistance)
+
+    return render_template('widerstandsrechner.html', form = form)

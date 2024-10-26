@@ -1,0 +1,16 @@
+{% from 'bootstrap5/form.html' import render_form %}
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm", style="align-items: center; padding: 60px; background-color: transparent; margin-top: 60px; border-radius: 30px;">
+    <div class="form-card">
+        <h2 style="align-self: center;">Widerstand berechnen</h2>
+        {{render_form(form)}}
+        <div class="form-card" style="margin-top: 15px;">
+            <h3>Ergebnis:</h3>
+            <input class="form-control" type="text" value="{{result}}&#937;" aria-label="Disabled input example" disabled readonly>
+        </div>
+    </div>
+</div>   
+
+{% endblock content %}
