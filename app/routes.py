@@ -75,7 +75,7 @@ def new_entry():
     username = current_user.name
     form = NewsForm()
     if form.validate_on_submit():
-        new_card = New_Card(header=form.header.data, content=form.content.data, author=form.author.data, imagepath=form.imagepath.data)
+        new_card = New_Card(header=form.header.data, content=form.content.data, credits=form.credits.data, imagepath=form.imagepath.data)
         db.session.add(new_card)
         db.session.commit()  # Änderungen speichern
         return redirect(url_for("main.manage_news"))
@@ -168,8 +168,18 @@ def favicon():
 @main.route("/tools/resistance-calculator", methods=["GET", "POST"])
 def resistance_calculator():
     form = ResistorForm()
+    voltage_text = "Spannung"
+    current_text = "Stromstärke"
     if form.validate_on_submit():
-        resistance = ResistanceCalculating.ResistanceCalculatorSingle(form.Voltage.data, form.Current.data)
-        return render_template('widerstandsrechner.html', form = form, result = resistance)
+        try:
+            voltage = float(form.Voltage.data)
+            current = float(form.Current.data)
+            result = ResistanceCalculating.ResistanceCalculatorSingle(voltage, current)
+            return render_template('widerstandsrechner.html', form = form, result=result, voltage_text=voltage_text, current_text=current_text)
+        except ValueError:
+            flash("Alle Werte müssen zahlen sein und in der Korrekten Form angegeben werden! (e.g. 0,1 = 0.1)")
+        except ZeroDivisionError:
+            flash("Werte dürfen nicht null sein! (Illegale Mathematische Operation!)")
+        return render_template('widerstandsrechner.html', form = form, voltage_text=voltage_text, current_text=current_text)
 
-    return render_template('widerstandsrechner.html', form = form)
+    return render_template('widerstandsrechner.html', form = form, voltage_text=voltage_text, current_text=current_text)

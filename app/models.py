@@ -6,7 +6,7 @@ class New_Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     header = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
-    author = db.Column(db.String, nullable=False)
+    credits = db.Column(db.String, nullable=False)
     imagepath = db.Column(db.String, nullable=False)
 
 class Admin_User(db.Model, UserMixin):
