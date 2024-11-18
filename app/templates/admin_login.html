@@ -1,34 +1,113 @@
-{% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
-
+{% extends 'base.html' %}
 {% block content %}
-<div class="container-sm", style="align-items: center; padding: 60px; background-color: rgb(191, 191, 191); margin-top: 60px; border-radius: 30px;">
-    <div class="form-card">
-        <h2 style="align-self: center;">Login</h2>
-    
-        <form method="POST">
-          {{ form.hidden_tag() }}
 
-    
-          <!-- Benutzername -->
-          <div class="mb-3 position-relative">
-            <span class="form-icon"><i class="bi bi-at"></i></span>
-            {{ form.username.label(class="form-label visually-hidden") }}
-            {{ form.username(class="form-control", placeholder="Benutzername") }}
-          </div>
-    
-          <!-- Passwort -->
-          <div class="mb-3 position-relative">
-            <span class="form-icon"><i class="bi bi-lock-fill"></i></span>
-            {{ form.password.label(class="form-label visually-hidden") }}
-            {{ form.password(class="form-control", placeholder="Passwort") }}
-          </div>
-    
-          <!-- Submit -->
-          <div class="d-grid gap-2">
-            {{ form.loginbutton(class="btn btn-primary btn-block") }}
-          </div>
-        </form>
-    </div>
-</div>    
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        margin: 50px auto;
+    }
+
+    .form-control {
+        border-radius: 50px;
+        padding-left: 2.5rem;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .form-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        color: #6c757d;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-radius: 50px;
+        transition: background-color 0.3s ease-in-out;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    h2 {
+        margin-bottom: 30px;
+        color: #343a40;
+    }
+
+    .alert {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        text-align: center;
+        font-size: large;
+        z-index: 1000;
+    }
+
+    .result-card {
+        background: #e9ecef;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .result-card h3 {
+        color: #495057;
+    }
+
+    .result-card input {
+        width: auto;
+        border: none;
+        background: transparent;
+        pointer-events: none;
+    }
+</style>
+
+
+<div class="form-card">
+    <h2 style="text-align: center;">Anmeldung</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        <!-- Spannung -->
+        <div class="mb-4 position-relative">
+            <span class="form-icon"><i class="bi bi-lightning-fill"></i></span>
+            <h2>Benutzername</h2>
+            {{ form.username(class="form-control", placeholder="bsp:Max.Mustermann") }}
+        </div>
+
+        <!-- Strom -->
+        <div class="mb-4 position-relative">
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
+            <h2>Passwort</h2>
+            {{ form.password(class="form-control", placeholder="Passwort.") }}
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Einloggen</button>
+        </div>
+    </form>
+
 {% endblock content %}

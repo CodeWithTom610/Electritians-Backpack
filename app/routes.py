@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session
 from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm
-from .models import New_Card, Admin_User, Tool_Cards
+from .models import New_Card, Admin_User, Tool_Cards, ToolCategories
 from .utils import check_password, hash_password, count_entries, send_token
 from . import db
 import os
@@ -32,8 +32,8 @@ def admin_login():
 @main.route('/tools-complete')
 def tools_complete():
     tools = Tool_Cards.query.all()
-    for tool in tools:
-        print(tool.tool_name)
+    #for tool in tools:
+        #print(tool.tool_name)
     return render_template('alle_tools.html', tools=tools)
 
 # Manage News (Add/Edit News)
@@ -62,7 +62,7 @@ def edit_news(news_id):
     if form.validate_on_submit():
         news_card.header = form.header.data
         news_card.content = form.content.data
-        news_card.author = form.author.data
+        news_card.credits = form.credits.data
         news_card.imagepath = form.imagepath.data
         db.session.commit()  # Änderungen speichern
         return redirect(url_for('main.admin_dashboard'))
@@ -155,15 +155,10 @@ def admin_dashboard():
     username = current_user.name
     news_cards = New_Card.query.all()
     count_user = count_entries()
+    count_categroies = ToolCategories.query.count()
     count_news = New_Card.query.count()
     count_tools = Tool_Cards.query.count()
-    return render_template('admin-dashboard.html', news_cards=news_cards, username=username, title="Dashboard | EBT-Backpack", count_user = count_user, count_news=count_news, count_tools=count_tools)
-
-@main.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(main.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
+    return render_template('admin-dashboard.html', news_cards=news_cards, username=username, title="Dashboard | EBT-Backpack", count_user = count_user, count_news=count_news, count_tools=count_tools, count_categroies=count_categroies)
 
 @main.route("/tools/resistance-calculator", methods=["GET", "POST"])
 def resistance_calculator():
@@ -183,3 +178,9 @@ def resistance_calculator():
         return render_template('widerstandsrechner.html', form = form, voltage_text=voltage_text, current_text=current_text)
 
     return render_template('widerstandsrechner.html', form = form, voltage_text=voltage_text, current_text=current_text)
+
+@main.route("/tools-complete/resistance-calculators")
+def resistance_calculators():
+    tools = Tool_Cards.query.filter_by(category = 0).all()
+    if tools:
+        return render_template("wiederstands_tools.html", tools=tools)

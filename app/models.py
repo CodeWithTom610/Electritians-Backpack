@@ -24,3 +24,9 @@ class Tool_Cards(db.Model):
     tool_name = db.Column(db.String, nullable=False)
     tool_description = db.Column(db.String, nullable=False)
     endpoint = db.Column(db.String, nullable=False)
+    category = db.Column(db.Integer, nullable=False)
+
+class ToolCategories(db.Model):
+    __tablename__ = "Tool_Categories"
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String, nullable = False)
