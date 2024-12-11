@@ -30,3 +30,14 @@ class ToolCategories(db.Model):
     __tablename__ = "Tool_Categories"
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String, nullable = False)
+
+class KnowledgeBaseItems(db.Model):
+    __tablename__ = "KnowledgeBaseItems"
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String)
+    content = db.Column(db.String)
+    author = db.Column(db.String)
+    imagepathbool = db.Column(db.String)
+    imagepath = db.Column(db.String)
+    endpointbool = db.Column(db.String)
+    endpoint = db.Column(db.String)

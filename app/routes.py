@@ -1,16 +1,16 @@
 from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session
 from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm
-from .models import New_Card, Admin_User, Tool_Cards, ToolCategories
+from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems
 from .utils import check_password, hash_password, count_entries, send_token
 from . import db
 import os
 import string
 import random
 from.tools import ResistanceCalculating
+from . import knowledgebase_items_charstoshow
 
 main = Blueprint('main', __name__)
-
 
 @main.route('/')
 def news():
@@ -184,3 +184,8 @@ def resistance_calculators():
     tools = Tool_Cards.query.filter_by(category = 0).all()
     if tools:
         return render_template("wiederstands_tools.html", tools=tools)
+
+@main.route("/knowledgebase")
+def knowledgebase():
+    knowledgebase_items = KnowledgeBaseItems.query.all()
+    return render_template("knowledgebase.html", items = knowledgebase_items, chars_to_show = knowledgebase_items_charstoshow)

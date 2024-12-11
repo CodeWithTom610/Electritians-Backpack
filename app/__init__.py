@@ -12,6 +12,7 @@ bootstrap = Bootstrap5()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 migrate = Migrate()
+knowledgebase_items_charstoshow = 200 # Creating Global Variable for Knowledgebase
 
 def create_app():
     app = Flask(__name__, static_url_path='/static')
@@ -27,6 +28,7 @@ def create_app():
     migrate.init_app(app, db)  # Migration initialisieren
 
     login_manager.login_view = "admin_login"
+
 
     # Import Blueprints and Models after App is created and Extensions initialized
     from .routes import main
