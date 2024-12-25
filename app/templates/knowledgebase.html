@@ -2,6 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
+    <a class="btn btn-primary" style="position: absolute; top: 61.5px; right:15px;" href="{{url_for('main.knowledgebase_new')}}"> + Eintrag Hinzufügen</a>
     <div class="row justify-content-center">  <!-- Zentriert die Karten -->
         {% for item in items %}
         <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamische Spalten -->
@@ -15,7 +16,7 @@
                     <h5 class="card-title">{{item.title}}</h5>
                     <p class="card-text">{{item.content[:chars_to_show]}}</p>
                     <p class="card-text" style="font-size: 10px;">{{item.author}}</p>
-                    <a class="btn btn-primary" href="{{'main.' + item.endpoint}}">Weiterlesen</a>
+                    <a class="btn btn-primary" href="{{url_for('main.knowledgebase_entry', entry_id=item.id)}}">Weiterlesen</a>
                 </div>
             </div>
         </div>

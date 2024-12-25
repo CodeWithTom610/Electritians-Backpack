@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session
 from flask_login import login_required, login_user, logout_user, current_user
-from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm
+from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm, New_Knowledgebase_Entry
 from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems
 from .utils import check_password, hash_password, count_entries, send_token
 from . import db
@@ -189,3 +189,61 @@ def resistance_calculators():
 def knowledgebase():
     knowledgebase_items = KnowledgeBaseItems.query.all()
     return render_template("knowledgebase.html", items = knowledgebase_items, chars_to_show = knowledgebase_items_charstoshow)
+
+@main.route("/knowledgebase/entry/<int:entry_id>")
+def knowledgebase_entry(entry_id):
+    entry = KnowledgeBaseItems.query.get_or_404(entry_id)
+    return render_template("knowledgebase_entry_view.html", entry=entry)
+
+@main.route('/knowledgebase/entry/new', methods=["GET", "POST"])
+def knowledgebase_new():
+    form = New_Knowledgebase_Entry()  # This is the form class, not the model
+    if form.validate_on_submit():
+        # Handle the image path and boolean flag
+        if form.imagepath.data == "":
+            form.imagepathbool.data = False
+        else:
+            form.imagepathbool.data = True
+            form.imagepath.data = "NULL"  # You should decide what to do here for a NULL image
+
+        # Create a new entry using the KnowledgeBaseItems model, not the form class
+        new_know_entry = KnowledgeBaseItems(
+            title=form.title.data,
+            content=form.content.data,
+            author=form.author.data,
+            imagepath=form.imagepath.data,
+            imagepathbool=form.imagepathbool.data,
+            date_of_creation=form.date_of_creation.data
+        )
+        characters = string.ascii_letters + string.digits + string.punctuation
+        token = "".join(random.choice(characters) for i in range(8))
+        flash(f"Your deletion Token is: {token}. Don't lose it or you cannot delete the entry by your self!")
+        db.session.add(new_know_entry)
+        db.session.commit()
+
+        return redirect(url_for('main.knowledgebase'))  # Redirect to knowledgebase page or wherever you'd like
+
+    return render_template('new_knowledgebase_entry.html', form=form)
+
+@main.route('/knowledgebase/entry/delete/<int:id>')
+def delete_know_entry(id):
+    entry = KnowledgeBaseItems.query.get_or_404(id)
+    db.session.delete(entry)
+    db.session.commit()
+    return redirect(url_for('main.knowledgebase'))
+
+@main.route('/knowledgebase/entry/edit/<int:id>', methods=["GET", "POST"])
+def edit_know_entry(id):
+    entry = KnowledgeBaseItems.query.get_or_404(id)
+    form = New_Knowledgebase_Entry(obj=entry)
+    if form.validate_on_submit():
+        entry.title=form.title.data
+        entry.content=form.content.data
+        entry.author=form.author.data
+        entry.imagepath=form.imagepath.data
+        entry.imagepathbool=form.imagepathbool.data
+        entry.date_of_creation=form.date_of_creation.data
+        db.session.commit()
+        return redirect(url_for("main.knowledgebase"))
+
+    return render_template("edit_know_entry.html", form=form)

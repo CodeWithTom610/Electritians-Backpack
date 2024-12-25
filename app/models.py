@@ -1,5 +1,9 @@
 from flask_login import UserMixin
 from . import db
+from datetime import datetime
+from time import gmtime, strftime
+
+date_today = strftime("%d.%m.%Y", gmtime())
 
 class New_Card(db.Model):
     __tablename__ = "NewsCards"
@@ -32,12 +36,21 @@ class ToolCategories(db.Model):
     name = db.Column(db.String, nullable = False)
 
 class KnowledgeBaseItems(db.Model):
-    __tablename__ = "KnowledgeBaseItems"
-    id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String)
-    content = db.Column(db.String)
-    author = db.Column(db.String)
-    imagepathbool = db.Column(db.String)
-    imagepath = db.Column(db.String)
-    endpointbool = db.Column(db.String)
-    endpoint = db.Column(db.String)
+    __tablename__ = 'knowledge_base_items'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    author = db.Column(db.String(100), nullable=False)
+    imagepath = db.Column(db.String(200), nullable=True)
+    imagepathbool = db.Column(db.Boolean, nullable=False, default=False)
+    date_of_creation = db.Column(db.DateTime, nullable=False, default=datetime.time)
+
+    def __init__(self, title, content, author, imagepath, imagepathbool, date_of_creation):
+        self.title = title
+        self.content = content
+        self.author = author
+        self.imagepath = imagepath
+        self.imagepathbool = imagepathbool
+        self.date_of_creation = date_of_creation
+

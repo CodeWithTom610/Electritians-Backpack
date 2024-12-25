@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, IntegerField, BooleanField, SubmitField, EmailField
+from wtforms import StringField, PasswordField, IntegerField, BooleanField, SubmitField, EmailField, TextAreaField, DateField
 from wtforms.validators import DataRequired, length, NumberRange
 
 class ResistorForm(FlaskForm):
@@ -32,3 +32,12 @@ class ResetForm(FlaskForm):
     password_repeat = PasswordField("Wiederhole neues Passwort", validators=[DataRequired(), length(8, 128)])
     reset_token = StringField("Trage hier deinen Reset Token ein.", validators=[DataRequired()])
     submit = SubmitField("Speichern")
+
+class New_Knowledgebase_Entry(FlaskForm):
+    title = StringField("Titel", validators=[DataRequired()])
+    content = TextAreaField("Inhalt - Fülle den Eintrag mit Leben", validators=[DataRequired()])
+    author = StringField("Autor", validators=[DataRequired()])
+    imagepathbool = BooleanField("Umfasst der Artikel ein Bild?")
+    imagepath = StringField("Bild Link - Bitte beachte, dass nur BMW-Interne Bilder ohne Attribution des Autors veröffentlicht wrden dürfen!")
+    date_of_creation = DateField("Erstellungsdatum", validators=[DataRequired()])
+    submit = SubmitField("Erstellen")

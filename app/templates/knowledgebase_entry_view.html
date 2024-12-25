@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <button id="delete_button" class="btn btn-danger" style="position: absolute; top: 61.5px; right:15px; color:white;" onclick="deleteAction()">Eintrag Löschen</button>
+    <a class="btn btn-primary" href="{{url_for('main.edit_know_entry', id = entry.id)}}" style="position: absolute; top: 61.5px; right:165px; color:white;">Eintrag Bearbeiten</a>
+<div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          {% if entry.imagepathbool == "True" %}
+          <img src="{{entry.imagepath}}" class="card-img-top" alt="Blog Bild" style="border-radius: 15px 15px 0 0; object-fit: cover; height: 300px;">
+          {% endif %}
+          <div class="card-body">
+            <h1 class="card-title">{{entry.title}}</h1>
+            <p class="text-muted">Veröffentlicht am <strong>{{entry.date_of_creation}}</strong> von <strong>{{entry.author}}</strong></p>
+            <hr>
+            <p>{{entry.content}}</p>
+          </div>
+        </div>
+<script>
+  let delete_button = document.getElementById("delete_button")
+  console.log("{{entry.id}}")
+  function deleteAction(){
+    delete_button.className = "btn btn-warning"
+    delete_button.textContent = "Bist du sicher?"
+    delete_button.onclick = () => redirectToDelete()
+  }
+  function redirectToDelete(){
+    alert("Eintrag erfolgreich gelöscht!")
+    window.location.href = "{{url_for('main.delete_know_entry', id = entry.id)}}";
+  }
+</script>
+{% endblock content %}
