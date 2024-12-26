@@ -93,7 +93,7 @@
     <h2 style="text-align: center;">Neuer Eintrag</h2> <!-- Title of the form -->
     
     <!-- Form submission method is POST -->
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }} <!-- Flask-WTF CSRF protection hidden field -->
         
         <!-- Title Input Field -->
@@ -134,6 +134,13 @@
             <h3>Erstellungsdatum</h3> <!-- Creation date heading -->
             <!-- Render the 'date_of_creation' form field with specific styling -->
             {{ form.date_of_creation(class="form-control", placeholder="") }}
+        </div>
+
+        <!-- File Upload Input Field -->
+        <div class="mb-4 position-relative">
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span> <!-- Icon for the input -->
+            <h3>Dateianhang</h3> <!-- File Upload heading -->
+            <input class="form-control" type="file" name="file" id="file">
         </div>
 
         <!-- Submit Button -->

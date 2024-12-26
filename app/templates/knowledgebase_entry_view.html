@@ -32,6 +32,15 @@
                         
                         <!-- Main content of the entry -->
                         <p>{{entry.content}}</p>
+
+                        <!-- Horizontal line to separate the content from the file download section -->
+                        <hr>
+                        {% if filename == "" %}
+                            <a class="btn btn-primary disabled" href="{{url_for('main.knowledgebase')}}">Keine Datei angehängt!</a> <!-- Link to download file from database! -->
+
+                        {% else %}
+                            <a class="btn btn-primary" href="{{url_for('main.download', upload_id = entry.id)}}">Datei {{filename}} Herunterladen:</a> <!-- Link to download file from database! -->
+                        {% endif %}
                     </div>
                 </div>
             </div>

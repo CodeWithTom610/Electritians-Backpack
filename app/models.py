@@ -61,3 +61,12 @@ class KnowledgeBaseItems(db.Model):
         self.imagepath = imagepath  # Set the image path
         self.imagepathbool = imagepathbool  # Set whether an image is included
         self.date_of_creation = date_of_creation  # Set the date of creation
+
+
+# Model for uploading files to local db
+class fileUploads(db.Model):
+    __tablename__ = "fileUploads" # Database table name
+    id = db.Column(db.Integer, primary_key=True)  # Primary key
+    filename = db.Column(db.String(50)) # Filename of the uploaded file
+    data = db.Column(db.LargeBinary) # Binary Data of uploaded file
+    

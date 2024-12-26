@@ -104,7 +104,7 @@
     <h2 style="text-align: center;">Neuer Eintrag</h2>  <!-- Title of the form -->
     
     <!-- Form that submits via POST -->
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <!-- CSRF token for form security -->
         {{ form.hidden_tag() }}
 
@@ -141,6 +141,14 @@
             <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>  <!-- Icon for the date input -->
             <h3>Erstellungsdatum</h3>  <!-- Label for the date field -->
             {{ form.date_of_creation(class="form-control", placeholder="") }}  <!-- Date input field -->
+        </div>
+        
+        <!-- New File Upload Input Field -->
+        <div class="mb-4 position-relative">
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span> <!-- Icon for the input -->
+            <h3>Dateianhang überschreiben</h3> <!-- File Upload heading -->
+            <input class="form-control" type="file" name="file" id="file">
+            <a href="{{url_for('main.download', upload_id = id)}}">Aktuelle Datei {{filename}} Herunterladen</a> <!-- Download link for current file! -->
         </div>
 
         <!-- Submit button centered at the bottom of the form -->

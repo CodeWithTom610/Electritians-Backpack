@@ -1,8 +1,9 @@
 # Import necessary modules and components from Flask and other dependencies
-from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session
+from io import BytesIO
+from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session, send_file
 from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm, New_Knowledgebase_Entry
-from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems
+from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems, fileUploads
 from .utils import check_password, hash_password, count_entries, send_token
 from . import db
 import os
@@ -248,15 +249,18 @@ def knowledgebase():
 # View a Single Knowledge Base Entry
 @main.route("/knowledgebase/entry/<int:entry_id>")
 def knowledgebase_entry(entry_id):
-    # Fetch the knowledge base entry by ID
+    # Fetch the knowledge base entry and file by ID
     entry = KnowledgeBaseItems.query.get_or_404(entry_id)
-    return render_template("knowledgebase_entry_view.html", entry=entry)
+    file = fileUploads.query.get_or_404(entry_id)
+    filename = file.filename
+    print(filename)
+    return render_template("knowledgebase_entry_view.html", entry=entry, filename=filename)
 
 # Create a New Knowledge Base Entry
 @main.route('/knowledgebase/entry/new', methods=["GET", "POST"])
 def knowledgebase_new():
     form = New_Knowledgebase_Entry()  # Instantiate the knowledge base form
-    if form.validate_on_submit():  # Validate the submitted form
+    if (form.validate_on_submit()) or (request.method == "POST"):  # Validate the submitted form
         # Handle optional image path
         if form.imagepath.data == "":
             form.imagepathbool.data = False
@@ -272,10 +276,9 @@ def knowledgebase_new():
             imagepathbool=form.imagepathbool.data,
             date_of_creation=form.date_of_creation.data
         )
-        # Generate a deletion token
-        characters = string.ascii_letters + string.digits + string.punctuation
-        token = "".join(random.choice(characters) for i in range(8))
-        flash(f"Your deletion token is: {token}. Don't lose it or you cannot delete the entry yourself!")
+        file = request.files['file']
+        upload = fileUploads(filename=file.filename, data=file.read())
+        db.session.add(upload) # Add uploaded files to database
         db.session.add(new_know_entry)  # Add the new entry to the database
         db.session.commit()  # Save the changes
         return redirect(url_for('main.knowledgebase'))  # Redirect to the knowledge base page
@@ -284,9 +287,11 @@ def knowledgebase_new():
 # Delete a Knowledge Base Entry
 @main.route('/knowledgebase/entry/delete/<int:id>')
 def delete_know_entry(id):
-    # Fetch the entry by ID
+    # Fetch the entry and file by ID
     entry = KnowledgeBaseItems.query.get_or_404(id)
+    file = fileUploads.query.get_or_404(id)
     db.session.delete(entry)  # Delete the entry
+    db.session.delete(file)   # Delete the file
     db.session.commit()  # Save the changes
     return redirect(url_for('main.knowledgebase'))
 
@@ -294,15 +299,26 @@ def delete_know_entry(id):
 @main.route('/knowledgebase/entry/edit/<int:id>', methods=["GET", "POST"])
 def edit_know_entry(id):
     entry = KnowledgeBaseItems.query.get_or_404(id)  # Fetch the entry by ID
+    file = fileUploads.query.get_or_404(id) # Fetch the file by ID
+    filename = file.filename
     form = New_Knowledgebase_Entry(obj=entry)  # Prepopulate the form with entry data
     if form.validate_on_submit():  # Validate the submitted form
         # Update the entry fields with the form data
+        file_new = request.files['file']
         entry.title = form.title.data
         entry.content = form.content.data
         entry.author = form.author.data
         entry.imagepath = form.imagepath.data
         entry.imagepathbool = form.imagepathbool.data
         entry.date_of_creation = form.date_of_creation.data
+        file.filename = file_new.filename
+        file.data = file_new.read()
         db.session.commit()  # Save the changes
         return redirect(url_for("main.knowledgebase"))  # Redirect to the knowledge base page
-    return render_template("edit_know_entry.html", form=form)
+    return render_template("edit_know_entry.html", form=form, file=file, id=id, filename=filename)
+
+# ----------- FILE DOWNLOAD -----------
+@main.route('/download/<upload_id>')
+def download(upload_id):
+    upload = fileUploads.query.filter_by(id=upload_id).first()
+    return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True )
