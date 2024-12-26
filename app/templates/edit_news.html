@@ -1,33 +1,48 @@
 {% block content %}
 <head>
+  <!-- Meta tags for character set and viewport configuration for responsive design -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Popper.js for tooltips and popups -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  
+  <!-- Bootstrap JS for responsive components -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  
+  <!-- Load Bootstrap CSS -->
   {{ bootstrap.load_css() }}
+  
+  <!-- Dynamic page title -->
   <title>{{title}}</title>
 </head>    
 
 <body class="bg-light">
 
+    <!-- Main content layout using Flexbox for sidebar and content area -->
     <main class="d-flex">
         <!-- Sidebar -->
         <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
+            <!-- Sidebar header with username -->
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">Moin, {{username}}</span>
+                <span class="fs-4">Moin, {{username}}</span>  <!-- Display the logged-in user's name -->
             </a>
             <hr>
+            <!-- Sidebar navigation links -->
             <ul class="nav nav-pills flex-column mb-auto">
+                <!-- Dashboard link -->
                 <li class="nav-item">
                     <a href="{{url_for('main.admin_dashboard')}}" class="nav-link text-white" aria-current="page">
                         <i class="bi bi-house-door-fill me-2"></i> Dashboard
                     </a>
                 </li>
+                <!-- Users management link -->
                 <li>
                     <a href="{{url_for('main.users')}}" class="nav-link text-white">
                         <i class="bi bi-people-fill me-2"></i> Benutzer
                     </a>
                 </li>
+                <!-- Edit news link (active state) -->
                 <li>
                     <a href="{{url_for('main.manage_news')}}" class="nav-link active">
                         <i class="bi bi-pencil-fill me-2"></i> Neuigkeiten bearbeiten
@@ -35,31 +50,35 @@
                 </li>
             </ul>
             <hr>
+            <!-- User dropdown menu (for logout) -->
             <div class="dropdown">
                 <a href="{{url_for('main.admin_dashboard')}}" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <strong>{{username}}</strong>
+                    <strong>{{username}}</strong>  <!-- Display username in the dropdown -->
                 </a>
+                <!-- Dropdown menu items -->
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="{{url_for('main.admin_logout')}}">Ausloggen</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('main.admin_logout')}}">Ausloggen</a></li>  <!-- Logout option -->
                 </ul>
             </div>
         </div>
 
         <!-- Main Content Area -->
         <div class="flex-grow-1 p-4">
-            <!-- Top Navigation or Breadcrumb -->
+            <!-- Top section with title and "New Entry" button -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>{{title}}</h2>
-                <a class="btn btn-primary" href="{{url_for('main.new_entry')}}" role="button">Neuer Eintrag</a>
+                <h2>{{title}}</h2>  <!-- Dynamic page title -->
+                <a class="btn btn-primary" href="{{url_for('main.new_entry')}}" role="button">Neuer Eintrag</a>  <!-- Button to create a new news entry -->
             </div>
+            
             <div class="col">
                 <div class="row" style="gap: 15px; padding-left:30px; padding-right:30px;">
-                    
+                    <!-- Loop through the news entries and display each one in a card -->
                     {% for new in news %}
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                          <h5 class="card-title">{{new.header}}</h5>
-                          <p class="card-text">{{new.content}}</p>
+                          <h5 class="card-title">{{new.header}}</h5>  <!-- News entry header -->
+                          <p class="card-text">{{new.content}}</p>  <!-- News entry content -->
+                          <!-- Edit and delete buttons for each news entry -->
                           <a href="{{url_for('main.edit_news', news_id=new.id)}}" class="btn btn-primary">Bearbeiten</a>
                           <a href="{{ url_for('main.delete_card', id=new.id) }}" class="btn btn-danger">Löschen</a>
                         </div>

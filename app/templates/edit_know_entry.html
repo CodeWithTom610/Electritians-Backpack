@@ -2,128 +2,152 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<!-- Inline CSS for styling the form and page -->
 <style>
+    /* Background color for the entire body */
     body {
         background-color: #f8f9fa;
     }
 
+    /* Styling for the form card container */
     .form-card {
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        max-width: 600px;
-        width: 100%;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        margin: 50px auto;
+        background: white;  /* Set background color of the card */
+        border-radius: 20px; /* Rounded corners for the card */
+        padding: 40px;  /* Padding inside the card */
+        max-width: 600px; /* Maximum width of the form card */
+        width: 100%;  /* Make the card responsive */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Shadow for depth */
+        margin: 50px auto; /* Center the card and add margin from top */
     }
 
+    /* Styling for the form inputs */
     .form-control {
-        border-radius: 50px;
-        padding-left: 2.5rem;
-        transition: border-color 0.3s;
+        border-radius: 50px;  /* Rounded corners for inputs */
+        padding-left: 2.5rem; /* Padding for left side (to accommodate icons) */
+        transition: border-color 0.3s; /* Smooth transition for focus */
     }
 
+    /* Focus effect for form inputs */
     .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #007bff;  /* Border color when input is focused */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add shadow on focus */
     }
 
+    /* Positioning and styling for the icons inside inputs */
     .form-icon {
         position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.2rem;
-        color: #6c757d;
+        left: 15px;  /* Positioning the icon to the left */
+        top: 50%;  /* Vertically center the icon */
+        transform: translateY(-50%);  /* Fine-tuning vertical alignment */
+        font-size: 1.2rem;  /* Icon size */
+        color: #6c757d;  /* Icon color */
     }
 
+    /* Styling for the primary submit button */
     .btn-primary {
-        background-color: #007bff;
-        border-radius: 50px;
-        transition: background-color 0.3s ease-in-out;
-        padding: 10px 20px;
-        font-size: 1.1rem;
+        background-color: #007bff; /* Primary button background */
+        border-radius: 50px;  /* Rounded corners for the button */
+        transition: background-color 0.3s ease-in-out; /* Smooth background change */
+        padding: 10px 20px;  /* Button padding */
+        font-size: 1.1rem;  /* Button font size */
     }
 
+    /* Hover effect for the primary button */
     .btn-primary:hover {
-        background-color: #0056b3;
+        background-color: #0056b3; /* Darken background on hover */
     }
 
+    /* Styling for the form header */
     h3 {
-        margin-bottom: 30px;
-        font-size: larger;
-        color: #343a40;
+        margin-bottom: 30px;  /* Space below the heading */
+        font-size: larger;  /* Increase font size */
+        color: #343a40;  /* Dark color for the heading */
     }
 
+    /* Styling for the alert message */
     .alert {
         position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: auto;
-        text-align: center;
-        font-size: large;
-        z-index: 1000;
+        bottom: 20px;  /* Fixed at the bottom of the page */
+        left: 50%;  /* Center horizontally */
+        transform: translateX(-50%); /* Fine-tune centering */
+        width: auto;  /* Allow alert to be auto-sized */
+        text-align: center; /* Center text inside the alert */
+        font-size: large; /* Increase font size for visibility */
+        z-index: 1000; /* Ensure the alert stays above other elements */
     }
 
+    /* Styling for result cards */
     .result-card {
-        background: #e9ecef;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-        margin-top: 20px;
+        background: #e9ecef;  /* Light grey background for results */
+        border-radius: 10px;  /* Rounded corners for the result card */
+        padding: 15px;  /* Padding inside the result card */
+        text-align: center;  /* Center text in the result card */
+        margin-top: 20px;  /* Space from the elements above */
     }
 
+    /* Styling for the title inside the result card */
     .result-card h3 {
-        color: #495057;
+        color: #495057;  /* Darker color for the result card heading */
     }
 
+    /* Styling for the inputs inside result cards */
     .result-card input {
-        width: auto;
-        border: none;
-        background: transparent;
-        pointer-events: none;
+        width: auto;  /* Allow the input width to adjust */
+        border: none;  /* Remove the border */
+        background: transparent;  /* Make the background transparent */
+        pointer-events: none;  /* Disable interactions with the input */
     }
 </style>
 
-
+<!-- Form container -->
 <div class="form-card">
-    <h2 style="text-align: center;">Neuer Eintrag</h2>
+    <h2 style="text-align: center;">Neuer Eintrag</h2>  <!-- Title of the form -->
+    
+    <!-- Form that submits via POST -->
     <form method="POST">
+        <!-- CSRF token for form security -->
         {{ form.hidden_tag() }}
-        
+
+        <!-- Form field for the title -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-lightning-fill"></i></span>
-            <h3>Titel</h3>
-            {{ form.title(class="form-control", placeholder="") }}
+            <span class="form-icon"><i class="bi bi-lightning-fill"></i></span>  <!-- Icon for the title input -->
+            <h3>Titel</h3>  <!-- Label for the title field -->
+            {{ form.title(class="form-control", placeholder="") }}  <!-- Title input field -->
         </div>
 
+        <!-- Form field for the content -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Inhalt</h3>
-            {{ form.content(class="form-control", placeholder="") }}
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>  <!-- Icon for the content input -->
+            <h3>Inhalt</h3>  <!-- Label for the content field -->
+            {{ form.content(class="form-control", placeholder="") }}  <!-- Content input field -->
         </div>
 
+        <!-- Form field for the author -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Autor</h3>
-            {{ form.author(class="form-control", placeholder="") }}
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>  <!-- Icon for the author input -->
+            <h3>Autor</h3>  <!-- Label for the author field -->
+            {{ form.author(class="form-control", placeholder="") }}  <!-- Author input field -->
         </div>
 
+        <!-- Form field for the image link -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Bildlink</h3>
-            {{ form.imagepath(class="form-control", placeholder="") }}
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>  <!-- Icon for the image link input -->
+            <h3>Bildlink</h3>  <!-- Label for the image link field -->
+            {{ form.imagepath(class="form-control", placeholder="") }}  <!-- Image path input field -->
         </div>
 
+        <!-- Form field for the creation date -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Erstellungsdatum</h3>
-            {{ form.date_of_creation(class="form-control", placeholder="") }}
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>  <!-- Icon for the date input -->
+            <h3>Erstellungsdatum</h3>  <!-- Label for the date field -->
+            {{ form.date_of_creation(class="form-control", placeholder="") }}  <!-- Date input field -->
         </div>
 
+        <!-- Submit button centered at the bottom of the form -->
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Einloggen</button>
+            <button type="submit" class="btn btn-primary">Einloggen</button>  <!-- Submit button -->
         </div>
     </form>
+</div>
+
 {% endblock content %}

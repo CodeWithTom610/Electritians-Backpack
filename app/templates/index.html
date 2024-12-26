@@ -2,16 +2,24 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="row justify-content-center">  <!-- Zentriert die Karten -->
+    <!-- Row to center the cards -->
+    <div class="row justify-content-center">  <!-- Centers the cards horizontally -->
         {% for new in news %}
-        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamische Spalten -->
-            <div class="card shadow-sm" style="width: 100%;">
-                <div style="height: 233px; overflow: hidden;"> <!-- Bildcontainer mit fester Höhe und Overflow-Eigenschaft -->
-                    <img src="{{new.imagepath}}" class="card-img-top" alt="{{new.credits}}" style="width: 100%; height: auto;"> <!-- Bild wird auf Breite skaliert -->
+        <!-- Dynamic columns based on screen size -->
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Flexbox-based dynamic columns, responsive to screen size -->
+            <div class="card shadow-sm" style="width: 100%;">  <!-- Card with shadow and full width -->
+                
+                <!-- Image container with fixed height and overflow handling -->
+                <div style="height: 233px; overflow: hidden;"> <!-- Sets fixed height for image container and hides overflowing content -->
+                    <!-- Image is scaled to width, height is automatically adjusted -->
+                    <img src="{{new.imagepath}}" class="card-img-top" alt="{{new.credits}}" style="width: 100%; height: auto;"> <!-- Image source and alt text for accessibility -->
                 </div>
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{new.header}}</h5>
-                    <p class="card-text">{{new.content}}</p>
+                
+                <div class="card-body d-flex flex-column">  <!-- Flexbox layout inside the card body -->
+                    <!-- Card title -->
+                    <h5 class="card-title">{{new.header}}</h5> <!-- Displays the header of the news -->
+                    <!-- Card text (content) -->
+                    <p class="card-text">{{new.content}}</p> <!-- Displays the content of the news entry -->
                 </div>
             </div>
         </div>

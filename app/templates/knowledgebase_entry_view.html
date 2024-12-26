@@ -1,33 +1,66 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <!-- Button to delete the entry with dynamic behavior -->
+    <!-- Initially the button triggers the deleteAction() function to change its behavior -->
     <button id="delete_button" class="btn btn-danger" style="position: absolute; top: 61.5px; right:15px; color:white;" onclick="deleteAction()">Eintrag Löschen</button>
+    
+    <!-- Button to edit the entry, links to the edit page of the entry -->
     <a class="btn btn-primary" href="{{url_for('main.edit_know_entry', id = entry.id)}}" style="position: absolute; top: 61.5px; right:165px; color:white;">Eintrag Bearbeiten</a>
-<div class="container my-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-          {% if entry.imagepathbool == "True" %}
-          <img src="{{entry.imagepath}}" class="card-img-top" alt="Blog Bild" style="border-radius: 15px 15px 0 0; object-fit: cover; height: 300px;">
-          {% endif %}
-          <div class="card-body">
-            <h1 class="card-title">{{entry.title}}</h1>
-            <p class="text-muted">Veröffentlicht am <strong>{{entry.date_of_creation}}</strong> von <strong>{{entry.author}}</strong></p>
-            <hr>
-            <p>{{entry.content}}</p>
-          </div>
+    
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Card displaying the entry content with shadow and rounded corners -->
+                <div class="card" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    
+                    <!-- Conditionally display image if 'imagepathbool' is True -->
+                    {% if entry.imagepathbool == "True" %}
+                    <img src="{{entry.imagepath}}" class="card-img-top" alt="Blog Bild" style="border-radius: 15px 15px 0 0; object-fit: cover; height: 300px;">
+                    {% endif %}
+                    
+                    <!-- Card body with entry details -->
+                    <div class="card-body">
+                        <!-- Title of the entry -->
+                        <h1 class="card-title">{{entry.title}}</h1>
+                        
+                        <!-- Display the publication date and author -->
+                        <p class="text-muted">Veröffentlicht am <strong>{{entry.date_of_creation}}</strong> von <strong>{{entry.author}}</strong></p>
+                        
+                        <!-- Horizontal line to separate the header from the content -->
+                        <hr>
+                        
+                        <!-- Main content of the entry -->
+                        <p>{{entry.content}}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-<script>
-  let delete_button = document.getElementById("delete_button")
-  console.log("{{entry.id}}")
-  function deleteAction(){
-    delete_button.className = "btn btn-warning"
-    delete_button.textContent = "Bist du sicher?"
-    delete_button.onclick = () => redirectToDelete()
-  }
-  function redirectToDelete(){
-    alert("Eintrag erfolgreich gelöscht!")
-    window.location.href = "{{url_for('main.delete_know_entry', id = entry.id)}}";
-  }
-</script>
+    </div>
+    
+    <!-- Script for handling the delete button's behavior -->
+    <script>
+        // Reference to the delete button element
+        let delete_button = document.getElementById("delete_button")
+        
+        // Log entry ID for debugging purposes
+        console.log("{{entry.id}}")
+        
+        // Function triggered when the delete button is clicked
+        function deleteAction(){
+            // Change button appearance and text to confirm deletion
+            delete_button.className = "btn btn-warning" // Change button color to yellow
+            delete_button.textContent = "Bist du sicher?" // Change button text to ask for confirmation
+            delete_button.onclick = () => redirectToDelete() // Change button's click handler to redirect to delete action
+        }
+        
+        // Function to handle the redirection after confirming deletion
+        function redirectToDelete(){
+            // Display a success message
+            alert("Eintrag erfolgreich gelöscht!")
+            
+            // Redirect to the route that deletes the entry
+            window.location.href = "{{url_for('main.delete_know_entry', id = entry.id)}}";
+        }
+    </script>
 {% endblock content %}

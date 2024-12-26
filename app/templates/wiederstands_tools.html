@@ -1,20 +1,40 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} <!-- Inherit from the 'base.html' layout for consistent structure. -->
 
 {% block content %}
 
-<div class="container mt-5">
-    <div class="row justify-content-center">  <!-- Zentriert die Karten -->
-        {% for tool in tools %}
-        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamische Spalten -->
-            <div class="card shadow-sm" style="width: 100%;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{tool.tool_name}}</h5>
-                    <p class="card-text">{{tool.tool_description}}</p>
-                    <a class="btn btn-primary" role="button" href="{{url_for('main.' + tool.endpoint)}}">Zum Tool</a>
+<!-- Container to wrap the tool cards -->
+<div class="container mt-5"> <!-- Margin-top of 5 for spacing from the top -->
+    <div class="row justify-content-center"> <!-- Center the tool cards horizontally within the row -->
+        
+        {% for tool in tools %} <!-- Iterate over the 'tools' list passed to the template -->
+        
+        <!-- Each tool is displayed inside a responsive column that adjusts based on screen size -->
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">
+            <!-- 
+                'col-lg-4' for large screens (3 columns),
+                'col-md-6' for medium screens (2 columns),
+                'col-sm-12' for small screens (1 column),
+                'd-flex' ensures the column is flexible and stretches its content
+            -->
+            
+            <!-- Card for each tool -->
+            <div class="card shadow-sm" style="width: 100%;"> <!-- Card with shadow for depth -->
+                <div class="card-body d-flex flex-column"> <!-- Card body with flexible layout for text and button -->
+
+                    <!-- Tool Name -->
+                    <h5 class="card-title">{{tool.tool_name}}</h5> <!-- Display the name of the tool -->
+                    
+                    <!-- Tool Description -->
+                    <p class="card-text">{{tool.tool_description}}</p> <!-- Display the description of the tool -->
+
+                    <!-- Button to navigate to the tool -->
+                    <a class="btn btn-primary" role="button" href="{{url_for('main.' + tool.endpoint)}}">Zum Tool</a> 
+                    <!-- Generate a dynamic URL for each tool based on its 'endpoint' field -->
                 </div>
             </div>
         </div>
-        {% endfor %}
+        
+        {% endfor %} <!-- End of the tools loop -->
     </div>
 </div>
 

@@ -2,14 +2,29 @@
 
 {% block content %}
 
+<!-- Main container for the content with a margin at the top -->
 <div class="container mt-5">
-    <div class="row justify-content-center">  <!-- Zentriert die Karten -->
-        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamische Spalten -->
+    <div class="row justify-content-center">  <!-- Centers the cards horizontally -->
+    
+        <!-- Dynamic columns for responsiveness, adjusting to screen size -->
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Flexbox column to stretch the card -->
+        
+            <!-- Card element with shadow and dynamic width -->
             <div class="card shadow-sm" style="width: 100%;">
-                <img src="../static/IMG/resistance.jpg" class="card-img-top" alt="...">
+            
+                <!-- Card image at the top -->
+                <img src="../static/IMG/resistance.jpg" class="card-img-top" alt="Widerstandsrechner Image">
+                
+                <!-- Card body with flexible layout to allow space for text and button -->
                 <div class="card-body d-flex flex-column">
+                
+                    <!-- Card title -->
                     <h5 class="card-title">Widerstandsrechner</h5>
+                    
+                    <!-- Description text for the card -->
                     <p class="card-text">Alle Tools, die den Widerstand berechnen können.</p>
+                    
+                    <!-- Button to navigate to the tools page -->
                     <a class="btn btn-primary" role="button" href="{{url_for('main.' + 'resistance_calculators')}}">Zu den Tools</a>
                 </div>
             </div>

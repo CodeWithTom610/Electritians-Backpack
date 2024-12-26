@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- External scripts for Popper.js (needed by Bootstrap) and Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-  
+
+  <!-- Inline styles for custom layout -->
   <style>
     body {
-      background: #f5f7fa;
+      background: #f5f7fa; /* Light gray background for the body */
       height: 100vh;
       display: flex;
       margin: 0;
-      overflow: hidden; /* Verhindert Scroll-Probleme */
+      overflow: hidden; /* Prevent scroll issues */
     }
 
     /* Sidebar styling */
     .sidebar {
-      background-color: #343a40;
-      color: white;
+      background-color: #343a40; /* Dark sidebar background */
+      color: white; /* White text color for sidebar */
       width: 280px;
       height: 100vh;
       flex-shrink: 0;
@@ -26,69 +28,74 @@
     }
 
     .sidebar a {
-      color: white;
-      text-decoration: none;
+      color: white; /* White color for links in sidebar */
+      text-decoration: none; /* No underline on links */
     }
 
     .sidebar .nav-link.active {
-      background-color: #007bff;
+      background-color: #007bff; /* Highlight active link with blue */
     }
 
     .sidebar hr {
-      border-color: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.3); /* Light separator line */
     }
 
-    /* Main content area */
+    /* Main content styling */
     .main-content {
       flex-grow: 1;
       padding: 40px;
-      overflow-y: auto; /* Falls der Inhalt größer wird */
-      background-color: #f8f9fa;
+      overflow-y: auto; /* Allows scrolling if content overflows */
+      background-color: #f8f9fa; /* Light background for main content */
     }
 
+    /* Styling for the form card */
     .form-card {
       background: white;
-      border-radius: 20px;
+      border-radius: 20px; /* Rounded corners for form card */
       padding: 40px;
       max-width: 500px;
       width: 100%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      margin: auto;
-      padding-top: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Shadow for form card */
+      margin: auto; /* Center form card */
     }
 
+    /* Styling for form input fields */
     .form-control {
-      border-radius: 50px;
-      padding-left: 2.5rem;
+      border-radius: 50px; /* Round corners for input fields */
+      padding-left: 2.5rem; /* Extra space for icons */
     }
 
+    /* Icon inside form input fields */
     .form-icon {
       position: absolute;
       left: 15px;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(-50%); /* Vertically center the icon */
       font-size: 1.2rem;
-      color: #6c757d;
+      color: #6c757d; /* Subtle icon color */
     }
 
+    /* Styling for primary button */
     .btn-primary {
-      background-color: #007bff;
-      border-radius: 50px;
-      transition: background-color 0.3s ease-in-out;
+      background-color: #007bff; /* Blue background for primary button */
+      border-radius: 50px; /* Rounded corners */
+      transition: background-color 0.3s ease-in-out; /* Smooth background color transition */
     }
 
     .btn-primary:hover {
-      background-color: #0056b3;
+      background-color: #0056b3; /* Darker blue when hovered */
     }
 
+    /* Styling for the heading inside the form */
     h2 {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 30px; /* Space below the heading */
     }
 
   </style>
-  {{ bootstrap.load_css() }}
-  <title>{{title}}</title>
+
+  {{ bootstrap.load_css() }} <!-- Load Bootstrap CSS -->
+  <title>{{title}}</title> <!-- Dynamically set the page title -->
 </head>    
 
 <body>
@@ -97,10 +104,11 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">Moin, {{username}}</span>
+                <span class="fs-4">Moin, {{username}}</span> <!-- Display the username dynamically -->
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
+                <!-- Sidebar navigation items with active link styling -->
                 <li class="nav-item">
                     <a href="{{url_for('main.admin_dashboard')}}" class="nav-link text-white" aria-current="page">
                         <i class="bi bi-house-door-fill me-2"></i> Dashboard
@@ -119,7 +127,8 @@
             </ul>
             <hr>
             <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" 
+                   id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <strong>{{username}}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -130,55 +139,55 @@
 
         <!-- Main Content Area -->
         <div class="main-content">
-            <!-- Top Navigation or Breadcrumb -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>{{title}}</h2>
+                <h2>{{title}}</h2> <!-- Display the dynamic page title -->
             </div>
 
-            <!-- Form Card -->
+            <!-- Form Card for user creation -->
             <div class="form-card">
-                <h2>Benutzerkonto erstellen</h2>
-            
+                <h2>Benutzerkonto erstellen</h2> <!-- Title for the form -->
+
                 <form method="POST">
-                  {{ form.hidden_tag() }}
-            
-                  <!-- Name -->
+                  {{ form.hidden_tag() }} <!-- CSRF protection -->
+
+                  <!-- Name input field -->
                   <div class="mb-3 position-relative">
-                    <span class="form-icon"><i class="bi bi-person-fill"></i></span>
-                    {{ form.name.label(class="form-label visually-hidden") }}
-                    {{ form.name(class="form-control", placeholder="Vollständiger Name") }}
+                    <span class="form-icon"><i class="bi bi-person-fill"></i></span> <!-- Person icon inside input field -->
+                    {{ form.name.label(class="form-label visually-hidden") }} <!-- Hide label visually -->
+                    {{ form.name(class="form-control", placeholder="Vollständiger Name") }} <!-- Name input field -->
                   </div>
-            
-                  <!-- Benutzername -->
+
+                  <!-- Username input field -->
                   <div class="mb-3 position-relative">
-                    <span class="form-icon"><i class="bi bi-at"></i></span>
+                    <span class="form-icon"><i class="bi bi-at"></i></span> <!-- At sign icon inside input field -->
                     {{ form.username.label(class="form-label visually-hidden") }}
-                    {{ form.username(class="form-control", placeholder="Benutzername") }}
+                    {{ form.username(class="form-control", placeholder="Benutzername") }} <!-- Username input field -->
                   </div>
-            
-                  <!-- E-Mail -->
+
+                  <!-- Email input field -->
                   <div class="mb-3 position-relative">
-                    <span class="form-icon"><i class="bi bi-envelope-fill"></i></span>
+                    <span class="form-icon"><i class="bi bi-envelope-fill"></i></span> <!-- Email icon -->
                     {{ form.e_mail.label(class="form-label visually-hidden") }}
-                    {{ form.e_mail(class="form-control", placeholder="E-Mail Adresse") }}
+                    {{ form.e_mail(class="form-control", placeholder="E-Mail Adresse") }} <!-- Email input field -->
                   </div>
-            
-                  <!-- Passwort -->
+
+                  <!-- Password input field -->
                   <div class="mb-3 position-relative">
-                    <span class="form-icon"><i class="bi bi-lock-fill"></i></span>
+                    <span class="form-icon"><i class="bi bi-lock-fill"></i></span> <!-- Lock icon -->
                     {{ form.password.label(class="form-label visually-hidden") }}
-                    {{ form.password(class="form-control", placeholder="Passwort") }}
+                    {{ form.password(class="form-control", placeholder="Passwort") }} <!-- Password input field -->
                   </div>
-            
-                  <!-- Submit -->
+
+                  <!-- Submit button -->
                   <div class="d-grid gap-2">
-                    {{ form.submit(class="btn btn-primary btn-block") }}
+                    {{ form.submit(class="btn btn-primary btn-block") }} <!-- Submit button with Bootstrap class -->
                   </div>
                 </form>
             </div>
         </div>
     </main>
 
+    <!-- Additional Bootstrap JS for functionality -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"></script>
 </body>

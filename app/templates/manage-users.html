@@ -2,32 +2,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Including Popper.js (used for Bootstrap's dropdown and other components) -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  
+  <!-- Including Bootstrap JS for interactive components like modals, dropdowns, etc. -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+  <!-- Including Bootstrap CSS for styling -->
   {{ bootstrap.load_css() }}
   <title>{{title}}</title>
 </head>
 
+<!-- Flash messages for user feedback -->
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     {% for message in messages %}
+        <!-- Displaying an error message if a user tries to delete their own account -->
         <div class="alert alert-danger fixed-bottom" role="alert">
             Du kannst deinen eigenen Benutzer nicht löschen, wenn du angemeldet bist.
         </div>
     {% endfor %}
-    {% endif %}
+  {% endif %}
 {% endwith %}
 
 <body class="bg-light">
 
     <main class="d-flex">
-        <!-- Sidebar -->
+        <!-- Sidebar with navigation links -->
         <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
+            <!-- Dashboard link with user's name displayed -->
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <span class="fs-4">Moin, {{username}}</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
+                <!-- Sidebar menu items -->
                 <li class="nav-item">
                     <a href="{{url_for('main.admin_dashboard')}}" class="nav-link text-white" aria-current="page">
                         <i class="bi bi-house-door-fill me-2"></i> Dashboard
@@ -45,26 +55,31 @@
                 </li>
             </ul>
             <hr>
+            <!-- Dropdown for user logout -->
             <div class="dropdown">
                 <a href="{{url_for('main.admin_dashboard')}}" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <strong>{{username}}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <!-- Logout link -->
                     <li><a class="dropdown-item" href="{{url_for('main.admin_logout')}}">Ausloggen</a></li>
                 </ul>
             </div>
         </div>
 
-        <!-- Main Content Area -->
+        <!-- Main content area -->
         <div class="flex-grow-1 p-4">
-            <!-- Top Navigation or Breadcrumb -->
+            <!-- Top navigation or breadcrumbs -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>{{title}}</h2>
+                <!-- Button to add a new user -->
                 <a class="btn btn-primary" href="{{url_for('main.new_user')}}" role="button">Neuer Benutzer</a>
             </div>
 
+            <!-- Table to display users -->
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
+                    <!-- Table header -->
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">ID</th>
@@ -75,6 +90,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- Loop through the 'users' list and display user data in table rows -->
                         {% for user in users %}
                         <tr>
                             <td>{{ user.id }}</td>
@@ -83,8 +99,9 @@
                             <td>{{ user.e_mail }}</td>
 
                             <td>
-                                    <a class="btn btn-danger" href="{{url_for('main.check_user', user_id = user.id)}}" role="button">Benutzer Löschen</a>
-                                    <a class="btn btn-warning" href="{{url_for('main.reset_password', user_id = user.id)}}" role="button">Passwort Zurücksetzen</a>
+                                <!-- Action buttons to delete or reset the user's password -->
+                                <a class="btn btn-danger" href="{{url_for('main.check_user', user_id = user.id)}}" role="button">Benutzer Löschen</a>
+                                <a class="btn btn-warning" href="{{url_for('main.reset_password', user_id = user.id)}}" role="button">Passwort Zurücksetzen</a>
                             </td>
                         </tr>
                         {% endfor %}

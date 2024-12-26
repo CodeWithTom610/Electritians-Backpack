@@ -1,93 +1,95 @@
 {% from 'bootstrap5/form.html' import render_form %}
-{% extends 'base.html' %}
+{% extends 'base.html' %} <!-- This template extends the 'base.html' layout to inherit the header, footer, and other base components. -->
 {% block content %}
 
+<!-- Custom styles for the page -->
 <style>
     body {
-        background-color: #f8f9fa;
+        background-color: #f8f9fa; /* Light background color for the entire body */
     }
 
     .form-card {
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        max-width: 600px;
-        width: 100%;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        margin: 50px auto;
+        background: white; /* White background for the form card */
+        border-radius: 20px; /* Rounded corners for the form */
+        padding: 40px; /* Internal padding for the form content */
+        max-width: 600px; /* Maximum width of the form */
+        width: 100%; /* Make the form responsive */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Add shadow for a floating effect */
+        margin: 50px auto; /* Center the form horizontally with margin */
     }
 
     .form-control {
-        border-radius: 50px;
-        padding-left: 2.5rem;
-        transition: border-color 0.3s;
+        border-radius: 50px; /* Rounded form input fields */
+        padding-left: 2.5rem; /* Add space for icons inside the input fields */
+        transition: border-color 0.3s; /* Smooth transition when input is focused */
     }
 
     .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #007bff; /* Change border color when the input field is focused */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add shadow on focus */
     }
 
     .form-icon {
         position: absolute;
-        left: 15px;
+        left: 15px; /* Position the icon inside the input field */
         top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.2rem;
-        color: #6c757d;
+        transform: translateY(-50%); /* Vertically center the icon */
+        font-size: 1.2rem; /* Set the size of the icon */
+        color: #6c757d; /* Set the icon color */
     }
 
     .btn-primary {
-        background-color: #007bff;
-        border-radius: 50px;
-        transition: background-color 0.3s ease-in-out;
-        padding: 10px 20px;
-        font-size: 1.1rem;
+        background-color: #007bff; /* Blue background for the submit button */
+        border-radius: 50px; /* Rounded corners for the button */
+        transition: background-color 0.3s ease-in-out; /* Smooth transition for button hover effect */
+        padding: 10px 20px; /* Padding for the button */
+        font-size: 1.1rem; /* Font size for the button text */
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
+        background-color: #0056b3; /* Darker blue on hover */
     }
 
     h2 {
-        margin-bottom: 30px;
-        color: #343a40;
+        margin-bottom: 30px; /* Margin below the header */
+        color: #343a40; /* Dark color for the header */
     }
 
     .alert {
-        position: fixed;
-        bottom: 20px;
+        position: fixed; /* Position the alert at the bottom of the page */
+        bottom: 20px; /* Distance from the bottom */
         left: 50%;
-        transform: translateX(-50%);
-        width: auto;
-        text-align: center;
-        font-size: large;
-        z-index: 1000;
+        transform: translateX(-50%); /* Center the alert horizontally */
+        width: auto; /* Auto width for the alert box */
+        text-align: center; /* Center text inside the alert box */
+        font-size: large; /* Larger font size for the alert */
+        z-index: 1000; /* Make sure the alert appears on top */
     }
 
     .result-card {
-        background: #e9ecef;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-        margin-top: 20px;
+        background: #e9ecef; /* Light gray background for the result card */
+        border-radius: 10px; /* Rounded corners for the result card */
+        padding: 15px; /* Padding inside the result card */
+        text-align: center; /* Center the text inside the card */
+        margin-top: 20px; /* Margin at the top */
     }
 
     .result-card h3 {
-        color: #495057;
+        color: #495057; /* Darker color for the result text */
     }
 
     .result-card input {
-        width: auto;
-        border: none;
-        background: transparent;
-        pointer-events: none;
+        width: auto; /* Adjust width to the content */
+        border: none; /* Remove border from the input */
+        background: transparent; /* Make the background transparent */
+        pointer-events: none; /* Disable interaction with the input field */
     }
 </style>
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
+            <!-- Display flash messages (if any) -->
             <div class="alert alert-danger" role="alert">
                 <strong>{{ message }}</strong>
             </div>
@@ -95,32 +97,37 @@
     {% endif %}
 {% endwith %}
 
+<!-- Main form card containing the user input fields -->
 <div class="form-card">
-    <h2 style="text-align: center;">Widerstand berechnen</h2>
+    <h2 style="text-align: center;">Widerstand berechnen</h2> <!-- Page title: "Calculate Resistance" -->
+    
+    <!-- Form starts here -->
     <form method="POST">
-        {{ form.hidden_tag() }}
-        
-        <!-- Spannung -->
+        {{ form.hidden_tag() }} <!-- CSRF token to protect the form from cross-site request forgery -->
+
+        <!-- Voltage Input Field -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-lightning-fill"></i></span>
-            <h2>Spanung</h2>
-            {{ form.Voltage(class="form-control", placeholder="Spannung U in [V]") }}
+            <span class="form-icon"><i class="bi bi-lightning-fill"></i></span> <!-- Icon for voltage -->
+            <h2>Spanung</h2> <!-- Label for the voltage input -->
+            {{ form.Voltage(class="form-control", placeholder="Spannung U in [V]") }} <!-- Form input for voltage -->
         </div>
 
-        <!-- Strom -->
+        <!-- Current Input Field -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h2>Stromstärke</h2>
-            {{ form.Current(class="form-control", placeholder="Strom I in [A]") }}
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span> <!-- Icon for current -->
+            <h2>Stromstärke</h2> <!-- Label for the current input -->
+            {{ form.Current(class="form-control", placeholder="Strom I in [A]") }} <!-- Form input for current -->
         </div>
 
+        <!-- Submit Button -->
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Berechnen</button>
+            <button type="submit" class="btn btn-primary">Berechnen</button> <!-- Submit button to calculate resistance -->
         </div>
     </form>
 
+    <!-- Result Card displaying the calculated resistance -->
     <div class="result-card">
-        <h3>Ergebnis: {{result}} Ω</h3>
+        <h3>Ergebnis: {{result}} Ω</h3> <!-- Display the calculated result, which is passed to the template -->
     </div>
 </div>
 

@@ -1,129 +1,146 @@
 {% from 'bootstrap5/form.html' import render_form %}
 {% extends 'base.html' %}
+
 {% block content %}
 
+<!-- Custom CSS Styling for the page -->
 <style>
     body {
-        background-color: #f8f9fa;
+        background-color: #f8f9fa; /* Light gray background for the page */
     }
 
     .form-card {
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        max-width: 600px;
-        width: 100%;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        margin: 50px auto;
+        background: white; /* White background for the form container */
+        border-radius: 20px; /* Rounded corners */
+        padding: 40px; /* Padding inside the card */
+        max-width: 600px; /* Max width of the form card */
+        width: 100%; /* Full width within the container */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Shadow for depth */
+        margin: 50px auto; /* Centering the form card with a margin */
     }
 
     .form-control {
-        border-radius: 50px;
-        padding-left: 2.5rem;
-        transition: border-color 0.3s;
+        border-radius: 50px; /* Rounded input fields */
+        padding-left: 2.5rem; /* Space for icons inside input */
+        transition: border-color 0.3s; /* Smooth transition on focus */
     }
 
     .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #007bff; /* Focus border color */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Light shadow on focus */
     }
 
     .form-icon {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.2rem;
-        color: #6c757d;
+        position: absolute; /* Positioning icon inside the input field */
+        left: 15px; /* Distance from the left side of input */
+        top: 50%; /* Centering the icon vertically */
+        transform: translateY(-50%); /* Adjusting for perfect vertical centering */
+        font-size: 1.2rem; /* Icon size */
+        color: #6c757d; /* Icon color */
     }
 
     .btn-primary {
-        background-color: #007bff;
-        border-radius: 50px;
-        transition: background-color 0.3s ease-in-out;
-        padding: 10px 20px;
-        font-size: 1.1rem;
+        background-color: #007bff; /* Primary button color */
+        border-radius: 50px; /* Rounded button */
+        transition: background-color 0.3s ease-in-out; /* Smooth hover effect */
+        padding: 10px 20px; /* Button padding */
+        font-size: 1.1rem; /* Font size for the button */
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
+        background-color: #0056b3; /* Darker blue on hover */
     }
 
     h3 {
-        margin-bottom: 30px;
-        font-size: larger;
-        color: #343a40;
+        margin-bottom: 30px; /* Spacing below the title */
+        font-size: larger; /* Larger font size for the form sections */
+        color: #343a40; /* Text color */
     }
 
     .alert {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: auto;
-        text-align: center;
-        font-size: large;
-        z-index: 1000;
+        position: fixed; /* Fixed position at the bottom */
+        bottom: 20px; /* 20px from the bottom */
+        left: 50%; /* Centering horizontally */
+        transform: translateX(-50%); /* Adjusting for perfect centering */
+        width: auto; /* Auto width for alert */
+        text-align: center; /* Centered text */
+        font-size: large; /* Font size for the alert */
+        z-index: 1000; /* High z-index to ensure it appears above other elements */
     }
 
     .result-card {
-        background: #e9ecef;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-        margin-top: 20px;
+        background: #e9ecef; /* Light gray background for result cards */
+        border-radius: 10px; /* Rounded corners */
+        padding: 15px; /* Padding inside the card */
+        text-align: center; /* Centered text inside result cards */
+        margin-top: 20px; /* Spacing above the result card */
     }
 
     .result-card h3 {
-        color: #495057;
+        color: #495057; /* Dark text color for the result card title */
     }
 
     .result-card input {
-        width: auto;
-        border: none;
-        background: transparent;
-        pointer-events: none;
+        width: auto; /* Input width */
+        border: none; /* No border */
+        background: transparent; /* Transparent background */
+        pointer-events: none; /* Disabling user interaction with the input */
     }
 </style>
 
-
+<!-- Form container -->
 <div class="form-card">
-    <h2 style="text-align: center;">Neuer Eintrag</h2>
+    <h2 style="text-align: center;">Neuer Eintrag</h2> <!-- Title of the form -->
+    
+    <!-- Form submission method is POST -->
     <form method="POST">
-        {{ form.hidden_tag() }}
+        {{ form.hidden_tag() }} <!-- Flask-WTF CSRF protection hidden field -->
         
+        <!-- Title Input Field -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-lightning-fill"></i></span>
-            <h3>Titel</h3>
+            <span class="form-icon"><i class="bi bi-lightning-fill"></i></span> <!-- Icon for the input -->
+            <h3>Titel</h3> <!-- Title heading -->
+            <!-- Render the 'title' form field with specific styling -->
             {{ form.title(class="form-control", placeholder="") }}
         </div>
 
+        <!-- Content Input Field -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Inhalt</h3>
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span> <!-- Icon for the input -->
+            <h3>Inhalt</h3> <!-- Content heading -->
+            <!-- Render the 'content' form field with specific styling -->
             {{ form.content(class="form-control", placeholder="") }}
         </div>
 
+        <!-- Author Input Field -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Autor</h3>
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span> <!-- Icon for the input -->
+            <h3>Autor</h3> <!-- Author heading -->
+            <!-- Render the 'author' form field with specific styling -->
             {{ form.author(class="form-control", placeholder="") }}
         </div>
 
+        <!-- Image URL Input Field -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Bildlink</h3>
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span> <!-- Icon for the input -->
+            <h3>Bildlink</h3> <!-- Image link heading -->
+            <!-- Render the 'imagepath' form field with specific styling -->
             {{ form.imagepath(class="form-control", placeholder="") }}
         </div>
 
+        <!-- Date of Creation Input Field -->
         <div class="mb-4 position-relative">
-            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
-            <h3>Erstellungsdatum</h3>
+            <span class="form-icon"><i class="bi bi-bolt-fill"></i></span> <!-- Icon for the input -->
+            <h3>Erstellungsdatum</h3> <!-- Creation date heading -->
+            <!-- Render the 'date_of_creation' form field with specific styling -->
             {{ form.date_of_creation(class="form-control", placeholder="") }}
         </div>
 
+        <!-- Submit Button -->
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Speichern</button>
+            <button type="submit" class="btn btn-primary">Speichern</button> <!-- Submit button -->
         </div>
     </form>
+</div>
+
 {% endblock content %}

@@ -2,20 +2,33 @@
 
 {% block content %}
 <div class="container mt-5">
+    <!-- Button to add a new entry, links to the 'knowledgebase_new' route -->
     <a class="btn btn-primary" style="position: absolute; top: 61.5px; right:15px;" href="{{url_for('main.knowledgebase_new')}}"> + Eintrag Hinzufügen</a>
-    <div class="row justify-content-center">  <!-- Zentriert die Karten -->
+    
+    <div class="row justify-content-center">  <!-- Centers the cards in the row -->
         {% for item in items %}
-        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamische Spalten -->
-            <div class="card shadow-sm" style="width: 100%;">
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamic columns for responsiveness -->
+            <div class="card shadow-sm" style="width: 100%;"> <!-- Card container with shadow effect -->
+                
+                <!-- Conditionally display image if 'imagepath' is not empty or True -->
                 {% if item.imagepath == "True" %}
-                <div style="height: 233px; overflow: hidden;"> <!-- Bildcontainer mit fester Höhe und Overflow-Eigenschaft -->
-                    <img src="{{item.imagepath}}" class="card-img-top" alt="{{item.imagepath}}" style="width: 100%; height: auto;"> <!-- Bild wird auf Breite skaliert -->
+                <div style="height: 233px; overflow: hidden;"> <!-- Fixed height container for the image, using overflow:hidden to maintain aspect ratio -->
+                    <img src="{{item.imagepath}}" class="card-img-top" alt="{{item.imagepath}}" style="width: 100%; height: auto;"> <!-- Image is scaled to fit the width of the card -->
                 </div>    
                 {% endif %}
+                
+                <!-- Card body with the content and action buttons -->
                 <div class="card-body d-flex flex-column">
+                    <!-- Title of the item (entry) -->
                     <h5 class="card-title">{{item.title}}</h5>
+                    
+                    <!-- Excerpt of the content (showing a truncated version based on chars_to_show) -->
                     <p class="card-text">{{item.content[:chars_to_show]}}</p>
+                    
+                    <!-- Display the author name in a small font size -->
                     <p class="card-text" style="font-size: 10px;">{{item.author}}</p>
+                    
+                    <!-- Button to read more about the item, links to the entry's full content -->
                     <a class="btn btn-primary" href="{{url_for('main.knowledgebase_entry', entry_id=item.id)}}">Weiterlesen</a>
                 </div>
             </div>

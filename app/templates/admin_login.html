@@ -1,12 +1,16 @@
 {% from 'bootstrap5/form.html' import render_form %}
 {% extends 'base.html' %}
+
 {% block content %}
 
+<!-- Custom Styles for the Form Page -->
 <style>
+    /* Setting the background color for the body */
     body {
         background-color: #f8f9fa;
     }
 
+    /* Styling for the form container (card) */
     .form-card {
         background: white;
         border-radius: 20px;
@@ -17,17 +21,20 @@
         margin: 50px auto;
     }
 
+    /* Customizing form input fields */
     .form-control {
         border-radius: 50px;
-        padding-left: 2.5rem;
-        transition: border-color 0.3s;
+        padding-left: 2.5rem;  /* Adding space for the icon inside the input field */
+        transition: border-color 0.3s;  /* Smooth transition for border color */
     }
 
+    /* Styling for the focused input field */
     .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #007bff;  /* Blue border on focus */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);  /* Blue shadow */
     }
 
+    /* Positioning and styling the icons inside the input fields */
     .form-icon {
         position: absolute;
         left: 15px;
@@ -37,6 +44,7 @@
         color: #6c757d;
     }
 
+    /* Styling the submit button */
     .btn-primary {
         background-color: #007bff;
         border-radius: 50px;
@@ -45,15 +53,18 @@
         font-size: 1.1rem;
     }
 
+    /* Hover effect for the submit button */
     .btn-primary:hover {
         background-color: #0056b3;
     }
 
+    /* Styling the title (h2) */
     h2 {
         margin-bottom: 30px;
         color: #343a40;
     }
 
+    /* Styling for alerts at the bottom of the page */
     .alert {
         position: fixed;
         bottom: 20px;
@@ -65,6 +76,7 @@
         z-index: 1000;
     }
 
+    /* Styling for the result card */
     .result-card {
         background: #e9ecef;
         border-radius: 10px;
@@ -77,6 +89,7 @@
         color: #495057;
     }
 
+    /* Styling for result card input (disabled) */
     .result-card input {
         width: auto;
         border: none;
@@ -85,29 +98,37 @@
     }
 </style>
 
-
+<!-- Form Container -->
 <div class="form-card">
+    <!-- Title of the Form -->
     <h2 style="text-align: center;">Anmeldung</h2>
+
+    <!-- Form starts here -->
     <form method="POST">
+        <!-- Include CSRF token (hidden) for security -->
         {{ form.hidden_tag() }}
-        
-        <!-- Spannung -->
+
+        <!-- User Name Field -->
         <div class="mb-4 position-relative">
             <span class="form-icon"><i class="bi bi-lightning-fill"></i></span>
             <h2>Benutzername</h2>
+            <!-- Render the 'username' field from the Flask-WTF form -->
             {{ form.username(class="form-control", placeholder="bsp:Max.Mustermann") }}
         </div>
 
-        <!-- Strom -->
+        <!-- Password Field -->
         <div class="mb-4 position-relative">
             <span class="form-icon"><i class="bi bi-bolt-fill"></i></span>
             <h2>Passwort</h2>
+            <!-- Render the 'password' field from the Flask-WTF form -->
             {{ form.password(class="form-control", placeholder="Passwort.") }}
         </div>
 
+        <!-- Submit Button -->
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Einloggen</button>
         </div>
     </form>
+</div>
 
 {% endblock content %}
