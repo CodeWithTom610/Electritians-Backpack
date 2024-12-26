@@ -20,28 +20,21 @@
 - [📍 Overview](#-overview)
 - [👾 Features](#-features)
 - [📁 Project Structure](#-project-structure)
-  - [📂 Project Index](#-project-index)
 - [🚀 Getting Started](#-getting-started)
   - [☑️ Prerequisites](#-prerequisites)
   - [⚙️ Installation](#-installation)
   - [🤖 Usage](#🤖-usage)
   - [🧪 Testing](#🧪-testing)
-- [📌 Project Roadmap](#-project-roadmap)
 - [🔰 Contributing](#-contributing)
-- [🎗 License](#-license)
-- [🙌 Acknowledgments](#-acknowledgments)
 
----
 
-## 📍 Overview
-
-<code>❯ REPLACE-ME</code>
-
----
+--
 
 ## 👾 Features
 
-<code>❯ REPLACE-ME</code>
+- Tools for ETIEs/EBTs directly out of your Pocket
+- Knowledgebase with file upload for plans etc.
+- Admin Panel/Dashboard with user invitation via e-mail.
 
 ---
 
