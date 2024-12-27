@@ -1,0 +1,156 @@
+{% from 'bootstrap5/form.html' import render_form %}
+{% extends 'base.html' %} <!-- This template extends the 'base.html' layout to inherit the header, footer, and other base components. -->
+{% block content %}
+
+<!-- Custom styles for the page -->
+<style>
+    body {
+        background-color: #f8f9fa; /* Light background color for the entire body */
+    }
+
+    .form-card {
+        background: white; /* White background for the form card */
+        border-radius: 20px; /* Rounded corners for the form */
+        padding: 40px; /* Internal padding for the form content */
+        max-width: 600px; /* Maximum width of the form */
+        width: 100%; /* Make the form responsive */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Add shadow for a floating effect */
+        margin: 50px auto; /* Center the form horizontally with margin */
+    }
+
+    .form-control {
+        border-radius: 50px; /* Rounded form input fields */
+        padding-left: 2.5rem; /* Add space for icons inside the input fields */
+        transition: border-color 0.3s; /* Smooth transition when input is focused */
+    }
+
+    .form-control:focus {
+        border-color: #007bff; /* Change border color when the input field is focused */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add shadow on focus */
+    }
+
+    .form-icon {
+        position: absolute;
+        left: 15px; /* Position the icon inside the input field */
+        top: 50%;
+        transform: translateY(-50%); /* Vertically center the icon */
+        font-size: 1.2rem; /* Set the size of the icon */
+        color: #6c757d; /* Set the icon color */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Blue background for the submit button */
+        border-radius: 50px; /* Rounded corners for the button */
+        transition: background-color 0.3s ease-in-out; /* Smooth transition for button hover effect */
+        padding: 10px 20px; /* Padding for the button */
+        font-size: 1.1rem; /* Font size for the button text */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    h2 {
+        margin-bottom: 30px; /* Margin below the header */
+        color: #343a40; /* Dark color for the header */
+    }
+
+    .alert {
+        position: fixed; /* Position the alert at the bottom of the page */
+        bottom: 20px; /* Distance from the bottom */
+        left: 50%;
+        transform: translateX(-50%); /* Center the alert horizontally */
+        width: auto; /* Auto width for the alert box */
+        text-align: center; /* Center text inside the alert box */
+        font-size: large; /* Larger font size for the alert */
+        z-index: 1000; /* Make sure the alert appears on top */
+    }
+
+    .result-card {
+        background: #e9ecef; /* Light gray background for the result card */
+        border-radius: 10px; /* Rounded corners for the result card */
+        padding: 15px; /* Padding inside the result card */
+        text-align: center; /* Center the text inside the card */
+        margin-top: 20px; /* Margin at the top */
+    }
+
+    .result-card h3 {
+        color: #495057; /* Darker color for the result text */
+    }
+
+    .result-card input {
+        width: auto; /* Adjust width to the content */
+        border: none; /* Remove border from the input */
+        background: transparent; /* Make the background transparent */
+        pointer-events: none; /* Disable interaction with the input field */
+    }
+</style>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <!-- Display flash messages (if any) -->
+            <div class="alert alert-danger" role="alert">
+                <strong>{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Main form card containing the user input fields -->
+<div class="form-card">
+    <h2 style="text-align: center;">Paralelschaltung: Gesamtwiderstand berechnen</h2> <!-- Page title: "Calculate Resistance" -->
+    
+    <!-- Form starts here -->
+    <form id="resistorform" method="POST">
+        <!-- Add a resistor input field -->
+        <button class="btn btn-primary" type="submit">Berechnen</button>
+        <br>
+    </form>
+    <!-- Add a resistor input field -->
+    <button style="margin-top: 10px;" id="add-resistor-button" class="btn btn-primary">Widerstand hinzufügen</button>
+
+    <!-- Result Card displaying the calculated resistance -->
+    <div class="result-card">
+        <h3>Ergebnis: {{total_resistance}} Ω</h3> <!-- Display the calculated result, which is passed to the template -->
+    </div>
+
+    <script>
+        // Initialisiere wichtige Variablen
+        let form = document.getElementById('resistorform'); // Das Hauptformular
+        let resistorCount = 0; // Zähler für die Anzahl der Widerstände
+        let add_resistor_button = document.getElementById('add-resistor-button'); // Button zum Hinzufügen von Widerständen
+        const resistors = []; // Array zur Speicherung der Widerstandswerte
+
+        // Event: Neues Widerstandsfeld hinzufügen
+        add_resistor_button.onclick = function() {
+            // Erhöhe die Anzahl der Widerstände
+            resistorCount++;
+        
+            // Erstelle ein neues Eingabefeld für den Widerstand
+            let resistorInput = document.createElement('input');
+            resistorInput.type = 'number'; // Akzeptiert nur numerische Eingaben
+            resistorInput.name = "resistors[]"; // Name für die Gruppierung der Eingaben
+            resistorInput.id = 'R' + resistorCount; // Eindeutige ID für das Feld
+            resistorInput.placeholder = 'Widerstandswert ' + resistorCount; // Platzhaltertext
+            resistorInput.className = 'form-control'; // Styling durch CSS
+            resistorInput.style.marginTop = '10px'; // Abstand zwischen Eingaben
+        
+            // Event: Speicher den eingegebenen Wert im Array
+            resistorInput.oninput = function() {
+                let value = parseFloat(this.value); // Konvertiere den Eingabewert in eine Zahl
+                if (!isNaN(value)) {
+                    resistors[resistorCount - 1] = value; // Speichere den Wert im Array
+                } else {
+                    resistors[resistorCount - 1] = undefined; // Ungültigen Wert entfernen
+                }
+            };
+        
+            // Füge das Eingabefeld dem Formular hinzu
+            form.appendChild(resistorInput);
+        };
+    
+    </script>
+</div>
+
+{% endblock content %}

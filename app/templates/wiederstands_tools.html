@@ -26,10 +26,14 @@
                     
                     <!-- Tool Description -->
                     <p class="card-text">{{tool.tool_description}}</p> <!-- Display the description of the tool -->
+                </div>
 
+                <div class="card-footer d-flex flex-column">
+                    
                     <!-- Button to navigate to the tool -->
                     <a class="btn btn-primary" role="button" href="{{url_for('main.' + tool.endpoint)}}">Zum Tool</a> 
                     <!-- Generate a dynamic URL for each tool based on its 'endpoint' field -->
+                
                 </div>
             </div>
         </div>

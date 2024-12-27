@@ -27,7 +27,9 @@
                     
                     <!-- Display the author name in a small font size -->
                     <p class="card-text" style="font-size: 10px;">{{item.author}}</p>
-                    
+                </div>
+                
+                <div class="card-footer d-flex flex-column">
                     <!-- Button to read more about the item, links to the entry's full content -->
                     <a class="btn btn-primary" href="{{url_for('main.knowledgebase_entry', entry_id=item.id)}}">Weiterlesen</a>
                 </div>

@@ -230,6 +230,27 @@ def resistance_calculator():
             flash("Werte dürfen nicht null sein! (Illegale Mathematische Operation!)", 'danger')
     return render_template('widerstandsrechner.html', form=form, voltage_text=voltage_text, current_text=current_text)
 
+
+# Total Resistance Calculator Tool
+@main.route("/tools/total-resistance-calculator", methods=["GET", "POST"])
+def total_resistance_calculator():
+    if request.method == "POST":
+        resistorlist = request.form.getlist('resistors[]')
+        for entry in resistorlist:
+            if entry == "":
+                resistorlist.remove(entry)
+            else:
+                pass
+        try:
+            calculator=ResistanceCalculating()
+            formatted_resistorlist = list(map(float, resistorlist))
+            total_resistance = calculator.total_resistance_parallel(formatted_resistorlist)
+            return render_template('total_resistance_calculator.html', total_resistance=total_resistance) 
+        except ZeroDivisionError:
+            flash("Werte dürfen nicht null sein! (Illegale Mathematische Operation!)", 'danger')
+            
+    return render_template('total_resistance_calculator.html')
+
 # View Tools Specific to Resistance Calculators
 @main.route("/tools-complete/resistance-calculators")
 def resistance_calculators():
