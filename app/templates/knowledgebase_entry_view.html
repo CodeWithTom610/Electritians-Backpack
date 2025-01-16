@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <title>Entry: {{entry.id}} | EBT-Backpack</title>
     <!-- Button to delete the entry with dynamic behavior -->
     <!-- Initially the button triggers the deleteAction() function to change its behavior -->
     <button id="delete_button" class="btn btn-danger" style="position: absolute; top: 61.5px; right:15px; color:white;" onclick="deleteAction()">Eintrag Löschen</button>

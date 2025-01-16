@@ -92,3 +92,8 @@ def send_token(reset_token: str, e_mail: str):
     
     # Send the email via the SendGrid API, using the API key from environment variables
     SendGridAPIClient(os.getenv("SENDGRID_API_KEY")).send(message)
+
+
+
+
+

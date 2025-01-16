@@ -1,5 +1,6 @@
 {% from 'bootstrap5/form.html' import render_form %}
-{% block content %}
+{% block content %},
+<title>Neuer Eintrag | EBT-Backpack</title>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,28 +155,28 @@
                   <div class="mb-3 position-relative">
                     <span class="form-icon"><i class="bi bi-person-fill"></i></span> <!-- Person icon inside input field -->
                     {{ form.header.label(class="form-label visually-hidden") }} <!-- Hide label visually -->
-                    {{ form.header(class="form-control", placeholder="Vollständiger Name") }} <!-- Name input field -->
+                    {{ form.header(class="form-control", placeholder="") }} <!-- Name input field -->
                   </div>
 
                   <!-- Content input field -->
                   <div class="mb-3 position-relative">
                     <span class="form-icon"><i class="bi bi-at"></i></span> <!-- At sign icon inside input field -->
                     {{ form.content.label(class="form-label visually-hidden") }}
-                    {{ form.content(class="form-control", placeholder="Benutzername") }} <!-- Username input field -->
+                    {{ form.content(class="form-control", placeholder="") }} <!-- Username input field -->
                   </div>
 
                   <!-- Imagepath input field -->
                   <div class="mb-3 position-relative">
                     <span class="form-icon"><i class="bi bi-envelope-fill"></i></span> <!-- Email icon -->
                     {{ form.imagepath.label(class="form-label visually-hidden") }}
-                    {{ form.imagepath(class="form-control", placeholder="E-Mail Adresse") }} <!-- Email input field -->
+                    {{ form.imagepath(class="form-control", placeholder="") }} <!-- Email input field -->
                   </div>
 
                   <!-- Credits input field -->
                   <div class="mb-3 position-relative">
                     <span class="form-icon"><i class="bi bi-lock-fill"></i></span> <!-- Lock icon -->
                     {{ form.credits.label(class="form-label visually-hidden") }}
-                    {{ form.credits(class="form-control", placeholder="Passwort") }} <!-- Password input field -->
+                    {{ form.credits(class="form-control", placeholder="") }} <!-- Password input field -->
                   </div>
 
                   <!-- Submit button -->

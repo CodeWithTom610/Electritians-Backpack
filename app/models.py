@@ -51,7 +51,7 @@ class KnowledgeBaseItems(db.Model):
     author = db.Column(db.String(100), nullable=False)  # Author of the knowledge base entry (required)
     imagepath = db.Column(db.String(200), nullable=True)  # Path to the associated image (optional)
     imagepathbool = db.Column(db.Boolean, nullable=False, default=False)  # Indicates if an image is included (default: False)
-    date_of_creation = db.Column(db.DateTime, nullable=False, default=datetime.time)  # Date when the entry was created (required)
+    date_of_creation = db.Column(db.Date, nullable=False, default=datetime.time)  # Date when the entry was created (required)
 
     # Constructor to initialize the model fields
     def __init__(self, title, content, author, imagepath, imagepathbool, date_of_creation):

@@ -1,68 +1,7 @@
-{% block content %}
-<head>
-  <!-- Meta tags for charset and responsive design -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Bootstrap JS and Popper.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-  
-  <!-- Load Bootstrap CSS dynamically -->
-  {{ bootstrap.load_css() }}
-  
-  <!-- Set the title of the page -->
-  <title>{{title}}</title>
-</head>    
-
-<body class="bg-light">
-    <!-- Main content wrapper with flex layout -->
-    <main class="d-flex">
-    
-        <!-- Sidebar -->
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
-            <!-- Brand or greeting in the sidebar -->
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">Moin, {{username}}</span>
-            </a>
-            <hr>
-            
-            <!-- Sidebar navigation menu -->
-            <ul class="nav nav-pills flex-column mb-auto">
-                <!-- Dashboard Link -->
-                <li class="nav-item">
-                    <a href="{{url_for('main.admin_dashboard')}}" class="nav-link active" aria-current="page">
-                        <i class="bi bi-house-door-fill me-2"></i> Dashboard
-                    </a>
-                </li>
-                <!-- Users Link -->
-                <li>
-                    <a href="{{url_for('main.users')}}" class="nav-link text-white">
-                        <i class="bi bi-people-fill me-2"></i> Benutzer
-                    </a>
-                </li>
-                <!-- Manage News Link -->
-                <li>
-                    <a href="{{url_for('main.manage_news')}}" class="nav-link text-white">
-                        <i class="bi bi-pencil-fill me-2"></i> Neuigkeiten Bearbeiten
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            
-            <!-- Dropdown for user settings -->
-            <div class="dropdown">
-                <a href="{{url_for('main.admin_dashboard')}}" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <strong>{{username}}</strong>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    <!-- Logout Option -->
-                    <li><a class="dropdown-item" href="{{url_for('main.admin_logout')}}">Ausloggen</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Main Content Area -->
+{% extends 'admin-base.html' %}
+<title>Dashboard | EBT-Backpack</title>
+{% block admin_content %}
+    <!-- Main Content Area -->
         <div class="flex-grow-1 p-4">
             <!-- Page title or breadcrumb -->
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -110,6 +49,4 @@
                 </div>
             </div>
         </div>
-    </main>
-</body>
-{% endblock content %}
+{% endblock %}
