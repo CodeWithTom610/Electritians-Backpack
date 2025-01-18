@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, redirect, url_for, send_from_direc
 from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm, New_Knowledgebase_Entry, Searching_Bar
 from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems, fileUploads
-from .utils import check_password, hash_password, count_entries, send_token
+from .utils import check_password, hash_password, count_entries, send_token, upload_file_to_server
 from . import db
 import os
 import string

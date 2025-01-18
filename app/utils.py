@@ -95,5 +95,22 @@ def send_token(reset_token: str, e_mail: str):
 
 
 
+def upload_file_to_server(filename, file_data, id):
+    import paramiko
+    from scp import SCPClient
 
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname, port=port, username=username, password=password)
+    with SCPClient(ssh.get_transport()) as scp:
+        file_in = open(f"{filename}-{id}")
+        file_in.write(file_data)
+        scp.put(file_in, remote_file_path)
 
+    # Example usage
+    hostname = '172.236.212.248'
+    port = 22
+    username = 'fileadmin'
+    password = 'password'
+    remote_file_path = '/upload_data'
