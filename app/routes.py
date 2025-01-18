@@ -52,7 +52,6 @@ def not_maintenance(func):
     def decorated_function(*args, **kwargs):
         global maintenance_mode
         if maintenance_mode:
-            abort(503, description="Service is currently under maintenance.")
             return render_template('wartungsarbeiten.html')
         return func(*args, **kwargs)
     return decorated_function
