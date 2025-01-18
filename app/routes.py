@@ -2,7 +2,7 @@
 from io import BytesIO
 from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session, send_file
 from flask_login import login_required, login_user, logout_user, current_user
-from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm, New_Knowledgebase_Entry
+from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm, New_Knowledgebase_Entry, Searching_Bar
 from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems, fileUploads
 from .utils import check_password, hash_password, count_entries, send_token
 from . import db
@@ -261,11 +261,30 @@ def resistance_calculators():
 # ----------- KNOWLEDGE BASE -----------
 
 # View All Knowledge Base Entries
-@main.route("/knowledgebase")
+@main.route("/knowledgebase", methods=["GET", "POST"])
 def knowledgebase():
-    # Fetch all knowledge base items
+    # Fetch all knowledge base items from the database
     knowledgebase_items = KnowledgeBaseItems.query.all()
-    return render_template("knowledgebase.html", items=knowledgebase_items, chars_to_show=knowledgebase_items_charstoshow)
+    # Instantiate the search form
+    form = Searching_Bar()
+    # Check if the form is submitted
+    if request.method == "POST":
+        # Check if the search field is not empty
+        print(form.searchField.data)
+        if form.searchField.data != "":
+            # Fetch the search query
+            search = form.searchField.data
+            # Filter the knowledge base items by the search query
+            knowledgebase_items = KnowledgeBaseItems.query.filter(KnowledgeBaseItems.title.contains(search) | KnowledgeBaseItems.content.contains(search) | KnowledgeBaseItems.author.contains(search) | KnowledgeBaseItems.date_of_creation.contains(search)).all()
+            # Return the search results
+            return render_template("knowledgebase.html", items=knowledgebase_items, chars_to_show=knowledgebase_items_charstoshow, form=form)
+        # If the search field is empty, return all knowledge base items
+        else:
+            # Fetch all knowledge base items
+            knowledgebase_items = KnowledgeBaseItems.query.all()
+            # Return all knowledge base items
+            return render_template("knowledgebase.html", items=knowledgebase_items, chars_to_show=knowledgebase_items_charstoshow, form=form)
+    return render_template("knowledgebase.html", items=knowledgebase_items, chars_to_show=knowledgebase_items_charstoshow, form=form)
 
 # View a Single Knowledge Base Entry
 @main.route("/knowledgebase/entry/<int:entry_id>")
@@ -274,8 +293,9 @@ def knowledgebase_entry(entry_id):
     entry = KnowledgeBaseItems.query.get_or_404(entry_id)
     file = fileUploads.query.get_or_404(entry_id)
     filename = file.filename
-    print(filename)
-    return render_template("knowledgebase_entry_view.html", entry=entry, filename=filename)
+    formatted_content = entry.content.replace("\r\n", "<br>").replace("\r", "<br>").replace("\n", "<br>")
+    formatted_text = formatted_content.replace(" ", "&nbsp;")  # Optional: Für Beibehaltung von Leerzeichen
+    return render_template("knowledgebase_entry_view.html", entry=entry, filename=filename, formatted_text=formatted_content)
 
 # Create a New Knowledge Base Entry
 @main.route('/knowledgebase/entry/new', methods=["GET", "POST"])

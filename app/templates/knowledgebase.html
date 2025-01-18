@@ -5,10 +5,14 @@
 <div class="container mt-5">
     <!-- Button to add a new entry, links to the 'knowledgebase_new' route -->
     <a class="btn btn-primary" style="position: absolute; top: 61.5px; right:15px;" href="{{url_for('main.knowledgebase_new')}}"> + Eintrag Hinzufügen</a>
-    
+    <!-- Search Bar for the Knowledgebase -->
+    <form class="form-inline my-2 my-lg-0 d-flex" style="gap: 5px;" method="POST" enctype="multipart/form-data">
+        {{form.searchField(class="form-control mr-sm-2", style="font-weight: bold", placeholder="Suche")}}
+        {{form.submit(class="btn btn-outline-success my-2 my-sm-0", style="border-width: 2px; font-weight:bold", placeholder="Suchen")}}
+    </form>
     <div class="row justify-content-center">  <!-- Centers the cards in the row -->
         {% for item in items %}
-        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4">  <!-- Dynamic columns for responsiveness -->
+        <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch mb-4" style="margin: 9px;">  <!-- Dynamic columns for responsiveness -->
             <div class="card shadow-sm" style="width: 100%;"> <!-- Card container with shadow effect -->
                 
                 <!-- Conditionally display image if 'imagepath' is not empty or True -->

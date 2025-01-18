@@ -7,7 +7,8 @@ from wtforms import (
     SubmitField,
     EmailField,
     TextAreaField,
-    DateField
+    DateField,
+    SearchField
 )  # Form field types
 from wtforms.validators import DataRequired, length, NumberRange  # Validators for form fields
 
@@ -84,3 +85,7 @@ class New_Knowledgebase_Entry(FlaskForm):
     date_of_creation = DateField("Erstellungsdatum", validators=[DataRequired()])
     # Button to create the new knowledge base entry
     submit = SubmitField("Erstellen")
+
+class Searching_Bar(FlaskForm):
+    searchField = SearchField()
+    submit = SubmitField()
