@@ -1,6 +1,6 @@
 # Import necessary modules and components from Flask and other dependencies
 from io import BytesIO
-from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session, send_file
+from flask import Blueprint, render_template, redirect, url_for, send_from_directory, app, flash, request, session, send_file, abort
 from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm, New_Knowledgebase_Entry, Searching_Bar
 from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems, fileUploads
@@ -19,35 +19,50 @@ main = Blueprint('main', __name__)
 #----------- MAINTENANCE MODE -----------
 
 
+# Globale Variable für den Wartungsmodus
+maintenance_mode = False
+
+# Wartungsmodus starten
 @main.route('/maintenance/start/<string:password>')
 def maintenance_start(password):
+    global maintenance_mode
     admin_password = Admin_User.query.filter_by(username="Admin").first().password
     checked_password = check_password(password, admin_password)
     if checked_password:
-        session["maintenance"] = True
-        return "Maintenance mode enabled"
+        maintenance_mode = True
+        return "Maintenance mode enabled for all sessions"
     else:
         return "Wrong password"
 
+# Wartungsmodus stoppen
 @main.route('/maintenance/stop/<string:password>')
 def maintenance_stop(password):
-    admin_user = Admin_User.query.filter_by(username="Admin").first()
-    print(admin_user)
-    admin_password = admin_user.password
+    global maintenance_mode
+    admin_password = Admin_User.query.filter_by(username="Admin").first().password
     checked_password = check_password(password, admin_password)
     if checked_password:
-        session.pop("maintenance", None)
-        return "Maintenance mode disabled"
+        maintenance_mode = False
+        return "Maintenance mode disabled for all sessions"
     else:
         return "Wrong password"
 
+# Decorator für Wartungsmodus
 def not_maintenance(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if session.get("maintenance"):
-            return render_template("wartungsarbeiten.html")
+        global maintenance_mode
+        if maintenance_mode:
+            abort(503, description="Service is currently under maintenance.")
         return func(*args, **kwargs)
     return decorated_function
+
+# Route, die immer verfügbar ist
+@main.route('/status')
+def status_page():
+    global maintenance_mode
+    if maintenance_mode:
+        return "Maintenance mode is ON."
+    return "Maintenance mode is OFF."
 
 
 # ----------- PUBLIC ROUTES -----------
