@@ -69,4 +69,3 @@ class fileUploads(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Primary key
     filename = db.Column(db.String(50)) # Filename of the uploaded file
     data = db.Column(db.LargeBinary) # Binary Data of uploaded file
-    

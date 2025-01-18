@@ -5,6 +5,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, NewsForm, UserForm, ResetForm, ResistorForm, New_Knowledgebase_Entry, Searching_Bar
 from .models import New_Card, Admin_User, Tool_Cards, ToolCategories, KnowledgeBaseItems, fileUploads
 from .utils import check_password, hash_password, count_entries, send_token, upload_file_to_server
+from functools import wraps
 from . import db
 import os
 import string
@@ -15,19 +16,56 @@ from . import knowledgebase_items_charstoshow
 # Define the main Blueprint for the application
 main = Blueprint('main', __name__)
 
+#----------- MAINTENANCE MODE -----------
+
+
+@main.route('/maintenance/start/<string:password>')
+def maintenance_start(password):
+    admin_password = Admin_User.query.filter_by(username="Admin").first().password
+    checked_password = check_password(password, admin_password)
+    if checked_password:
+        session["maintenance"] = True
+        return "Maintenance mode enabled"
+    else:
+        return "Wrong password"
+
+@main.route('/maintenance/stop/<string:password>')
+def maintenance_stop(password):
+    admin_user = Admin_User.query.filter_by(username="Admin").first()
+    print(admin_user)
+    admin_password = admin_user.password
+    checked_password = check_password(password, admin_password)
+    if checked_password:
+        session.pop("maintenance", None)
+        return "Maintenance mode disabled"
+    else:
+        return "Wrong password"
+
+def not_maintenance(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if session.get("maintenance"):
+            return render_template("wartungsarbeiten.html")
+        return func(*args, **kwargs)
+    return decorated_function
+
+
 # ----------- PUBLIC ROUTES -----------
 
 # Home Page - Display news cards
 @main.route('/')
+@not_maintenance
 def news():
     # Fetch all news cards from the database
     news = New_Card.query.all()
     return render_template('index.html', title="Home | EBT-Backpack", news=news)
 
+
 # ----------- ADMIN AUTHENTICATION -----------
 
 # Admin Login Page
 @main.route('/admin', methods=["GET", "POST"])
+@not_maintenance
 def admin_login():
     form = LoginForm()  # Instantiate the login form
     if form.validate_on_submit():  # Validate the submitted form
@@ -43,6 +81,7 @@ def admin_login():
 
 # Admin Logout
 @main.route('/admin/logout', methods=["GET", "POST"])
+@not_maintenance
 @login_required  # Ensure only logged-in users can access this route
 def admin_logout():
     logout_user()  # Log out the current user
@@ -52,6 +91,7 @@ def admin_logout():
 
 # Manage News - Display and edit news cards
 @main.route('/admin/news', methods=["GET", "POST"])
+@not_maintenance
 @login_required  # Ensure only logged-in users can access this route
 def manage_news():
     # Fetch all news cards from the database
@@ -60,6 +100,7 @@ def manage_news():
 
 # Edit an Existing News Card
 @main.route('/admin/edit-news/<int:news_id>', methods=["GET", "POST"])
+@not_maintenance
 @login_required
 def edit_news(news_id):
     username = current_user.name  # Get the current admin's username
@@ -77,6 +118,7 @@ def edit_news(news_id):
 
 # Create a New News Card
 @main.route('/admin/edit-news/new-entry', methods=["GET", "POST"])
+@not_maintenance
 @login_required
 def new_entry():
     username = current_user.name  # Get the current admin's username
@@ -96,6 +138,7 @@ def new_entry():
 
 # Delete a News Card
 @main.route('/admin/delete-news/delete/<int:id>', methods=['GET', 'POST'])
+@not_maintenance
 @login_required
 def delete_card(id):
     # Fetch the news card by ID
@@ -108,6 +151,7 @@ def delete_card(id):
 
 # View and Manage Admin Users
 @main.route('/admin/users')
+@not_maintenance
 @login_required
 def users():
     username = current_user.name  # Get the current admin's username
@@ -116,6 +160,7 @@ def users():
 
 # Check and Validate User Deletion
 @main.route("/admin/users/check_user/<int:user_id>")
+@not_maintenance
 @login_required
 def check_user(user_id):
     current_user_id = current_user.id  # Get the current admin's user ID
@@ -127,6 +172,7 @@ def check_user(user_id):
 
 # Delete an Admin User
 @main.route('/admin/users/delete_user/<int:user_id>', methods=['GET', 'POST'])
+@not_maintenance
 @login_required
 def delete_user(user_id):
     user = Admin_User.query.get_or_404(user_id)  # Fetch the user by ID
@@ -135,6 +181,7 @@ def delete_user(user_id):
     return redirect(url_for('main.users'))  # Redirect to the users page
 # Create a New Admin User
 @main.route('/admin/users/new_user', methods=['GET', 'POST'])
+@not_maintenance
 @login_required
 def new_user():
     form = UserForm()  # Instantiate the user form
@@ -162,6 +209,7 @@ def new_user():
 
 # Reset an Admin User's Password
 @main.route('/admin/users/reset/password/<int:user_id>', methods=['GET', 'POST'])
+@not_maintenance
 @login_required
 def reset_password(user_id):
     username = current_user.name  # Get the current admin's username
@@ -182,6 +230,7 @@ def reset_password(user_id):
 
 # Admin Dashboard - Display summary statistics
 @main.route('/admin/dashboard', methods=["GET", "POST"])
+@not_maintenance
 @login_required
 def admin_dashboard():
     username = current_user.name  # Get the current admin's username
@@ -206,12 +255,14 @@ def admin_dashboard():
 
 # View All Tools
 @main.route('/tools-complete')
+@not_maintenance
 def tools_complete():
     tools = Tool_Cards.query.all()  # Fetch all tool cards
     return render_template('alle_tools.html', tools=tools)
 
 # Resistance Calculator Tool
 @main.route("/tools/resistance-calculator", methods=["GET", "POST"])
+@not_maintenance
 def resistance_calculator():
     form = ResistorForm()  # Instantiate the resistor form
     voltage_text = "Spannung"
@@ -233,6 +284,7 @@ def resistance_calculator():
 
 # Total Resistance Calculator Tool
 @main.route("/tools/total-resistance-calculator", methods=["GET", "POST"])
+@not_maintenance
 def total_resistance_calculator():
     if request.method == "POST":
         resistorlist = request.form.getlist('resistors[]')
@@ -253,6 +305,7 @@ def total_resistance_calculator():
 
 # View Tools Specific to Resistance Calculators
 @main.route("/tools-complete/resistance-calculators")
+@not_maintenance
 def resistance_calculators():
     tools = Tool_Cards.query.filter_by(category=0).all()  # Fetch resistance calculator tools
     if tools:
@@ -262,6 +315,7 @@ def resistance_calculators():
 
 # View All Knowledge Base Entries
 @main.route("/knowledgebase", methods=["GET", "POST"])
+@not_maintenance
 def knowledgebase():
     # Fetch all knowledge base items from the database
     knowledgebase_items = KnowledgeBaseItems.query.all()
@@ -288,6 +342,7 @@ def knowledgebase():
 
 # View a Single Knowledge Base Entry
 @main.route("/knowledgebase/entry/<int:entry_id>")
+@not_maintenance
 def knowledgebase_entry(entry_id):
     # Fetch the knowledge base entry and file by ID
     entry = KnowledgeBaseItems.query.get_or_404(entry_id)
@@ -299,6 +354,7 @@ def knowledgebase_entry(entry_id):
 
 # Create a New Knowledge Base Entry
 @main.route('/knowledgebase/entry/new', methods=["GET", "POST"])
+@not_maintenance
 def knowledgebase_new():
     form = New_Knowledgebase_Entry()  # Instantiate the knowledge base form
     if (form.validate_on_submit()) or (request.method == "POST"):  # Validate the submitted form
@@ -327,6 +383,7 @@ def knowledgebase_new():
 
 # Delete a Knowledge Base Entry
 @main.route('/knowledgebase/entry/delete/<int:id>')
+@not_maintenance
 def delete_know_entry(id):
     # Fetch the entry and file by ID
     entry = KnowledgeBaseItems.query.get_or_404(id)
@@ -338,6 +395,7 @@ def delete_know_entry(id):
 
 # Edit a Knowledge Base Entry
 @main.route('/knowledgebase/entry/edit/<int:id>', methods=["GET", "POST"])
+@not_maintenance
 def edit_know_entry(id):
     entry = KnowledgeBaseItems.query.get_or_404(id)  # Fetch the entry by ID
     file = fileUploads.query.get_or_404(id) # Fetch the file by ID
@@ -360,6 +418,7 @@ def edit_know_entry(id):
 
 # ----------- FILE DOWNLOAD -----------
 @main.route('/download/<upload_id>')
+@not_maintenance
 def download(upload_id):
     upload = fileUploads.query.filter_by(id=upload_id).first()
     return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True )
