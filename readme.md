@@ -39,6 +39,8 @@ EBT-Backpack ist eine Webanwendung, die verschiedene Tools und Funktionen bietet
 1. Starte die Anwendung:
     ```sh
     flask run
+    # Alternativ kann auch ein developer WebServer gestartet werden.
+    # Hierzu die datei 'run.py' ausführen.
     ```
 2. Öffne deinen Webbrowser und gehe zu `http://127.0.0.1:5000`.
 
