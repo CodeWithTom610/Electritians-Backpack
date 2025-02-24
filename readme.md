@@ -1,6 +1,6 @@
 # EBT-Backpack
 
-EBT-Backpack ist eine Webanwendung, die verschiedene Tools und Funktionen bietet, um den Benutzern zu helfen, ihre Aufgaben effizient zu erledigen. Die Anwendung nutzt Flask als Web-Framework und bietet eine Vielzahl von Funktionen, darunter Benutzerverwaltung, Nachrichtenverwaltung und verschiedene Berechnungstools.
+**EBT-Backpack** ist eine Webanwendung, die verschiedene Tools und Funktionen bietet, um den Benutzern zu helfen, ihre Aufgaben effizient zu erledigen. Die Anwendung nutzt Flask als Web-Framework.
 
 ## Inhaltsverzeichnis
 
@@ -36,7 +36,7 @@ EBT-Backpack ist eine Webanwendung, die verschiedene Tools und Funktionen bietet
     ```sh
     flask run
     # Alternativ kann auch ein developer WebServer gestartet werden.
-    # Hierzu die datei 'run.py' ausführen.
+    # Hierzu die Datei 'run.py' ausführen.
     ```
 2. Öffne deinen Webbrowser und gehe zu `http://127.0.0.1:5000`.
 
