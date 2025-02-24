@@ -29,10 +29,6 @@ EBT-Backpack ist eine Webanwendung, die verschiedene Tools und Funktionen bietet
     ```sh
     pip install -r requirements.txt
     ```
-5. Erstelle die Datenbank:
-    ```sh
-    flask db upgrade
-    ```
 
 ## Verwendung
 
